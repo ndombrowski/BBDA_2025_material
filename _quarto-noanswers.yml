@@ -1,5 +1,5 @@
 project:
-  output-dir: docs/solution
+  output-dir: docs/
   render:
     - "*.qmd" 
     - "!random.qmd"
@@ -18,5 +18,6 @@ format:
 filters:
     - config/italics-denovo.lua
     - config/links.lua
+    - config/hide-answers.lua
 
 bibliography: config/references.bib

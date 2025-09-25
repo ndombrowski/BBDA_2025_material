@@ -5,6 +5,7 @@ title: |
     writing SLURM arrays
 
 author: "Nina Dombrowski"
+output-dir: docs
 
 format: 
     revealjs:

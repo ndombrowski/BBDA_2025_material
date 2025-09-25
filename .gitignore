@@ -6,3 +6,5 @@ slides
 
 /.quarto/
 random.qmd
+
+/.luarc.json
