@@ -19,7 +19,7 @@ The workflow in de novo assembly begins with the quality filtering: removing sho
 
 In today's practical session, you will learn how to:
 
--   Extract information from the papers methods section
+-   Extract information from a papers methods section
 -   Prepare raw sequencing data for de novo transcriptome assembly
 -   Assemble transcriptomic data into transcripts using Trinity
 
@@ -161,30 +161,34 @@ All following code sections will have a similar structure and consist of comment
 DATA="/zfs/omics/projects/education/BBDA_transcriptomics/denovo/data"
 
 # Make a folder to store the fastqc results
-mkdir -p quality/raw
+# Hint: Since you will repeat the step after the quality cleaning
+# make a subfolder to store the outputs when analysing the raw data
+...
 
 # Run FastQC
-# Hints: run FastQC on all files at once
-#       ensure that the data is generated in the output folder that you have just generated
-#       submit this on the compute node with srun with these settings:
-#       `--cpus-per-task 5` and `--mem=20G`
-#       Make use of the DATA variable to access the raw fastq.gz files
+# Hints: - Run FastQC on all files at once
+#        - Ensure that the data is generated in the output folder that you have just generated
+#       - Submit this on the compute node with srun with these settings:
+#         `--cpus-per-task 5` and `--mem=20G`
+#       - Make use of the DATA variable to access the raw fastq.gz files
 srun --cpus-per-task 5 --mem=20G ...
 
 # Run seqkit
 # `seqkit stats` can be used to generate summary stats for multiple fastq files in a single text file
-# Hints:   Use srun with 5 CPUs and 20G of memory, 
-#          generate a single file with all stats for all 12 fastq files in tabular format
-#          store the output file in the quality/raw folder
-#          Make use of the DATA variable
+# Hints:   - Use srun with 5 CPUs and 20G of memory, 
+#          - Generate a single output file that contains all stats 
+#            for all 12 fastq files in tabular format
+#          - Store the output file in the quality/raw folder
+#          - Make use of the DATA variable
 srun ...
 
 # Count the total number of sequences across all FASTQ files
-# Step 1: seqkit stats output has the number of reads in column 4
-# Step 2: Use awk to:
+# The command below does the following:
+# Step 1: Uses the seqkit stats output that has the nr. of reads in column 4
+# Step 2: Uses awk to:
 #         - skip the header row (NR>1)
 #         - sum the values from column 4 (sum+=$4)
-# Step 3: Print the total number of reads at the end
+# Step 3: Prints the total number of reads at the end
 # Hint: replace 'quality/raw/seqkit.tsv' with the path to your own stats file
 awk 'NR>1 {sum+=$4} END {print sum}' quality/raw/seqkit.tsv
 
@@ -270,10 +274,10 @@ DATA="/zfs/omics/projects/education/BBDA_transcriptomics/denovo/data/"
 SAMPLE=$(cut -f1 metadata.txt | sed "1d" | sed -n "${SLURM_ARRAY_TASK_ID}p")
 
 # Run fastp
-# - Use the DATA and SAMPLE variables to build file names
-# - Trim reads where quality drops below 25 in a 3 bp window
-# - Discard reads shorter than 50 bp
-# - Save paired outputs
+# Hints:    - Use the DATA and SAMPLE variables to build file names
+#           - Trim reads where quality drops below 25 in a 3 bp window
+#           - Discard reads shorter than 50 bp
+#           - Save paired outputs in two separate files
 fastp ...
 '''
 
@@ -360,14 +364,16 @@ There are a range of different tools for de novo assembly. In this tutorial, we 
 #         - printf     : builds the content of each column with
 #                       sample name, replicate name, path to read1, path to read2
 #         - count[$2]  : keep track of replicate numbers per sample
-# Step 3: Adjust paths if your FastP output folder has a different name
+# **Important**:    Adjust the path in printf if your FastP folder has a different name
+#                   You find the term `fastp` twice in the line with printf 
+#                   replace it with any the folder name that you have used
 awk 'BEGIN{OFS="\t"} 
         NR>1 {
             printf "%s\t%s_rep%d\tfastp/%s_1_paired.fastq.gz\tfastp/%s_2_paired.fastq.gz\n", \
             $2, $2, ++count[$2], $1, $1
         }' metadata.txt > trinity_mapping.txt
 
-# Write and run a sbatch script to execute trinity 
+# Write and run a sbatch script to execute Trinity 
 # Hints: - Ensure that you activate the `trinity_bbda` conda environment in your script
 #        - `source ~/.bashrc` is needed to activate conda inside compute node
 #        - In the slurm directives ask for 10 CPUs, 50G and 24 hours of run time

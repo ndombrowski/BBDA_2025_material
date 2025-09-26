@@ -3151,9 +3151,9 @@ vertical-align: -.125em;
 
 <section id="todays-aims" class="level2">
 <h2 class="anchored" data-anchor-id="todays-aims">Today’s aims</h2>
-<p>In the first part of this tutorial you familiarized yourself with the data, performed quality filtering and started a <em>de novo</em> assembly with Trinity. Today, we will:</p>
+<p>In the first part of this tutorial you familiarized yourself with the data, performed quality filtering and started a <em>de novo</em> assembly with Trinity. Today, you will:</p>
 <ul>
-<li>Assess the quality of your assembly</li>
+<li>Assess the quality of the assembly</li>
 <li>Perform gene prediction and annotation</li>
 <li>Identify differentially expressed genes</li>
 </ul>
@@ -3256,7 +3256,7 @@ Answer
 <ol type="1">
 <li>Comparison to the paper:
 <ol type="1">
-<li>Your assembly likely produced around 80,000 transcripts, which is fewer than the ~170,000 reported in the original study. The difference is expected because we worked with subsampled reads to reduce the computational load. This is a good example for how reducing sequencing depth might results in an under-representation of lowly expressed transcripts.</li>
+<li>Your assembly likely produced around 80,000 transcripts, which is less than the ~170,000 reported in the original study. The difference is expected because we worked with subsampled reads to reduce the computational load. This is a good example for how reducing sequencing depth might results in an under-representation of lowly expressed transcripts.</li>
 <li>The N50 value should be around 2,200 bp, which suggests the assembly quality is in line with the original study despite having fewer input reads.</li>
 </ol></li>
 </ol>
@@ -3371,10 +3371,10 @@ Question
 <div class="callout-body-container callout-body">
 <p>After BUSCO completes, answer the following:</p>
 <ol type="1">
-<li>Is the assembly complete?
+<li>How complete is the assembly?
 <ul>
 <li>Look up how BUSCO defines completeness.</li>
-<li>Are there limitations to using BUSCO for transcriptome assemblies?</li>
+<li>Are there limitations to using BUSCO to assess the completeness of transcriptome assemblies?</li>
 </ul></li>
 <li>How many duplicates are there?
 <ul>
@@ -3402,8 +3402,8 @@ Answer
 <li>2.4% of markers were fragmented</li>
 <li>4.3% of markers were missing</li>
 </ul>
-<p>A genome completeness score above 90% is considered good. However, note that BUSCO assesses completeness by looking for a lineage-specific number of marker genes. In our cases that are 255 genes that are specific for eukaryotes.</p>
-<p>Marker genes are selected as those that are present in at least 90% of the species in a given lineage, and present in a single copy in 90% of those species. These genes are mostly housekeeping genes, such as ribosomal proteins, which are usually highly expressed and easy to assemble. Therefore, high BUSCO scores do not guarantee that all relevant or condition-specific genes were captured. Genes that are poorly expressed or not expressed at all under your experimental conditions may still be missing from the assembly.</p>
+<p>A genome completeness score above 90% is considered good. However, note that BUSCO assesses completeness by looking for a lineage-specific number of marker genes. In our cases that are 255 genes that are specific for eukaryotes. This means that only 255 genes are used to evaluate the completeness of a transcriptome that consists of several thousand genes.</p>
+<p>Marker genes are selected as those that are present in at least 90% of the species in a given lineage, and present in a single copy in 90% of those species. These genes are mostly housekeeping genes, such as ribosomal proteins, which are usually highly expressed and often easier to assemble. Therefore, high BUSCO scores do not guarantee that all relevant or condition-specific genes were captured. Genes that are poorly expressed or not expressed at all under your experimental conditions may still be missing from the assembly.</p>
 <p><strong>2. Duplication rate</strong></p>
 <p>Around 77% of the detected marker genes were duplicates, which seems high. However, since we work with a transcriptome a single gene can often produce multiple isoforms, which appear as duplicated entries to BUSCO. This is expected and we therefore do not need to worry about a high duplication rate when working with transcriptomes.</p>
 </div>
@@ -3415,31 +3415,31 @@ Answer
 </section>
 <section id="annotation" class="level2">
 <h2 class="anchored" data-anchor-id="annotation">Annotation</h2>
-<p>After assembly and quality control, we can translate the transcript sequences into predicted coding sequences (CDS), identify proteins and then annotate their biological function. In the next section you will do the following:</p>
+<p>After assembly and quality control, we will translate the transcript sequences into coding sequences (CDS), identify proteins and then annotate their biological function. In the next section you will do the following:</p>
 <ul>
-<li>Gene calling using TransDecoder</li>
-<li>Functional annotation using HMMER with the KEGG database</li>
+<li>Perform gene calling using TransDecoder</li>
+<li>Do a functional annotation using HMMER with the KEGG database</li>
 </ul>
 <section id="gene-calling" class="level3">
 <h3 class="anchored" data-anchor-id="gene-calling">Gene calling</h3>
 <p>We will use <a href="https://github.com/TransDecoder/TransDecoder/wiki" target="_blank" rel="noopener noreferrer">TransDecoder</a> to identify likely coding regions (open reading frames, ORFs) and predict proteins from our transcriptome assembly <span class="citation" data-cites="haas2025">(<a href="#ref-haas2025" role="doc-biblioref">Haas 2025</a>)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a output folder</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare an output folder</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run transdecoder </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run TransDecoder </span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:  - Transdecoder can be accessed via the `transcriptomics_bbda` environment</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Transdecoder consists of two steps </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Transdecoder consists of two steps that are run separately </span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#               1. `TransDecoder.LongOrfs` to find long open reading frames </span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#               2. `TransDecoder.Predict` to predict cds and proteins</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ensure that you account for stand information </span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         - make use of the gene to transcript map in step 1</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ensure that in step 2 you only produce a single output cds sequence/transcript to simplify our analysis</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         - use srun with 1 CPU and 20G of memory</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Ensure that you account for stand information </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Make use of the gene to transcript map in step 1</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Ensure that in step 2 you only produce a single output cds sequence/transcript to simplify our analysis</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Use srun with 1 CPU and 20G of memory</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Use cut to simplify the header of the protein sequences and to </span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># remove everything after the space</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># remove everything after the space.</span></span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># That is a useful habit in order to keep protein (and names in general) short and simple</span></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -3482,57 +3482,58 @@ Code example
 </section>
 <section id="functional-annotation" class="level3">
 <h3 class="anchored" data-anchor-id="functional-annotation">Functional annotation</h3>
-<p>Next, we will functionally annotate the predicted proteins by comparing them to the <a href="https://www.genome.jp/kegg/pathway.html" target="_blank" rel="noopener noreferrer">KEGG Orthology (KO) database</a> using HMMER’s <a href="http://eddylab.org/software/hmmer/Userguide.pdf" target="_blank" rel="noopener noreferrer">hmmsearch</a><span class="citation" data-cites="Finn2015">Kanehisa (<a href="#ref-Kanehisa2000" role="doc-biblioref">2000</a>)</span>. This will allow us to link each transcript to a potential function.</p>
-<p>Note, this will run for 1-2 hours. So once the job started successfully, you can proceed with the following steps. You only will need the results of this analysis once you finished the DEG analysis.</p>
+<p>Next, we will functionally annotate the predicted proteins by comparing them to the <a href="https://www.genome.jp/kegg/pathway.html" target="_blank" rel="noopener noreferrer">KEGG Orthology (KO) database</a> using HMMER’s <a href="http://eddylab.org/software/hmmer/Userguide.pdf" target="_blank" rel="noopener noreferrer">hmmsearch algorithm</a><span class="citation" data-cites="Finn2015 Kanehisa2000">(<a href="#ref-Finn2015" role="doc-biblioref">Finn et al. 2015</a>; <a href="#ref-Kanehisa2000" role="doc-biblioref">Kanehisa 2000</a>)</span>. This will allow us to link each transcript to a potential function.</p>
+<p>Note that this will run for 1-2 hours. So once the job started successfully, you can proceed with the following steps. You only will need the results of this analysis once you finished the DEG analysis.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a sbatch script to run a hmmsearch to compare your proteins against KEGG profiles</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:  </span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#         - The KEGG database can be found at </span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#           `/zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/KO_db.hmm`</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Generate a table of per-sequence hits</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Use a setting to generate a table of per-sequence hits</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         - add this setting: --notextw </span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         - use at max 10 CPUs, 20G of memory and 4 hours of run time</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> annotations/KEGG/</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the HMMER results to keep only the best hit per transcript</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Convert consecutive spaces to tabs </span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Remove header lines (those starting with &quot;#&quot;)</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Extract columns of interest: transcript ID, target name, bitscore, and e-value</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Keep only hits with e-value &lt;= 1E-3</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 5: Sort first by transcript ID, then by highest bitscore and lowest e-value</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 6: From the sorted list, keep only the top hit per transcript</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/ \+ /\t/g&#39;</span> annotations/KEGG/sequence_results.txt <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sed</span> <span class="st">&#39;/^#/d&#39;</span><span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/ /\t/g&#39;</span><span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;{print $1, $3, $6, $5}&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;($4 + 0) &lt;= 1E-3&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-k3,3gr</span> <span class="at">-k4,4g</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">--stable</span> <span class="at">-u</span> <span class="at">-k1,1</span> <span class="dt">\</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span>  annotations/KEGG/sequence_results_best_hit.txt</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the filtered HMMER results with the KEGG Orthology (KO) mapping file</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Inside `&lt;()` sort both files to prepare them for &#39;join&#39;</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co">#         - sequence_results_best_hit.txt is sorted by column 2 (KO ID)</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ko_list is sorted by column 1 (KO ID)</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;join&#39; to combine the two files on these columns</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -1 2 : match column 2 of the first file</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -2 1 : match column 1 of the second file</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -a1 : keep all rows from the first file, even if no match is found</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -e &#39;-&#39; : fill in missing values with &#39;-&#39;</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -t $&#39;\t&#39; : use tab as the delimiter</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -o ... : specify output order </span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#                    (from file 1: cols 1,2,4,3; from file 2: cols 2 and 12)</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Sort the merged output and save as &#39;temp&#39;</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">join</span> <span class="at">-a1</span> <span class="at">-1</span> 2 <span class="at">-2</span> 1 <span class="at">-e</span><span class="st">&#39;-&#39;</span> <span class="at">-t</span> <span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-o1.1,1.2,1.4,1.3,2.2,2.12</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k2</span> annotations/KEGG/sequence_results_best_hit.txt<span class="op">)</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k1</span>  /zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/ko_list<span class="op">)</span> <span class="kw">|</span> <span class="va">LC_ALL</span><span class="op">=</span>C  <span class="fu">sort</span> <span class="op">&gt;</span>  temp</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a header line to the final output file</span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Use &#39;echo&#39; to print the header with column names</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;cat - temp&#39; to concatenate the header (-) with the contents of &#39;temp&#39;</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co">#         - here, &#39;-&#39; tells &#39;cat&#39; to read from standard input (the echoed header)</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="co">#         - &#39;temp&#39; is the file with our merged results</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Save everything into the final output file &#39;annotations/KEGG/annotations.txt&#39;</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">&quot;accession\tKO_hmm\tKO_e_value\tKO_bit_score\tKO_bit_score_cutoff\tKO_Definition&quot;</span> <span class="kw">|</span> <span class="fu">cat</span> <span class="at">-</span> temp <span class="op">&gt;</span> annotations/KEGG/sequence_results_best_hit_desc.txt</span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup intermediate files</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> temp </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The code below does the following:</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Convert consecutive spaces to tabs </span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Remove lines starting with &quot;#&quot;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Extract columns of interest: transcript ID, target name, bitscore, and e-value</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Keep only hits with e-value &lt;= 1E-3</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 5: Sort first by transcript ID, then by highest bitscore and lowest e-value</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 6: From the sorted list, keep only the top hit per transcript</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/ \+ /\t/g&#39;</span> annotations/KEGG/sequence_results.txt <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sed</span> <span class="st">&#39;/^#/d&#39;</span><span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/ /\t/g&#39;</span><span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;{print $1, $3, $6, $5}&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;($4 + 0) &lt;= 1E-3&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-k3,3gr</span> <span class="at">-k4,4g</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">--stable</span> <span class="at">-u</span> <span class="at">-k1,1</span> <span class="dt">\</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span>  annotations/KEGG/sequence_results_best_hit.txt</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the filtered HMMER results with the KEGG Orthology (KO) mapping file</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Inside `&lt;()` sort both files to prepare them for &#39;join&#39;</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#         - sequence_results_best_hit.txt is sorted by column 2 (KO ID)</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ko_list is sorted by column 1 (KO ID)</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;join&#39; to combine the two files on the KO ID columns</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -1 2 : match column 2 of the first file</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -2 1 : match column 1 of the second file</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -a1 : keep all rows from the first file, even if no match is found</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -e &#39;-&#39; : fill in missing values with &#39;-&#39;</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -t $&#39;\t&#39; : use tab as the delimiter</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -o ... : specify output order </span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co">#                    (from file 1: cols 1,2,4,3; from file 2: cols 2 and 12)</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Sort the merged output and save as &#39;temp&#39;</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">join</span> <span class="at">-a1</span> <span class="at">-1</span> 2 <span class="at">-2</span> 1 <span class="at">-e</span><span class="st">&#39;-&#39;</span> <span class="at">-t</span> <span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-o1.1,1.2,1.4,1.3,2.2,2.12</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k2</span> annotations/KEGG/sequence_results_best_hit.txt<span class="op">)</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k1</span>  /zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/ko_list<span class="op">)</span> <span class="kw">|</span> <span class="va">LC_ALL</span><span class="op">=</span>C  <span class="fu">sort</span> <span class="op">&gt;</span>  temp</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a header line to the final output file</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Use &#39;echo&#39; to print the header with column names</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;cat - temp&#39; to concatenate the header (-) with the contents of &#39;temp&#39;</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="co">#         - here, &#39;-&#39; tells &#39;cat&#39; to read from standard input (the echoed header)</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co">#         - &#39;temp&#39; is the file with our merged results</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Save everything into the final output file &#39;annotations/KEGG/annotations.txt&#39;</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">&quot;accession\tKO_hmm\tKO_e_value\tKO_bit_score\tKO_bit_score_cutoff\tKO_Definition&quot;</span> <span class="kw">|</span> <span class="fu">cat</span> <span class="at">-</span> temp <span class="op">&gt;</span> annotations/KEGG/sequence_results_best_hit_desc.txt</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup intermediate files</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> temp </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-simple callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
@@ -3627,7 +3628,7 @@ Answer
 <li>We started with ~100,000 thousand transcripts and ended up with ~55,000 proteins</li>
 <li>We have less proteins than transcripts because
 <ol type="1">
-<li>Not all transcripts contain coding sequences (CDSs)</li>
+<li>Not all transcripts contain coding sequences (CDS)</li>
 <li>Short transcripts, potential artifacts (e.g., chimeras), or untranslated regions will not result in a protein sequence</li>
 </ol></li>
 </ol></li>
@@ -3666,12 +3667,12 @@ Answer
 <h3 class="anchored" data-anchor-id="quantification-with-salmon">Quantification with salmon</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write an sbatch script to run salmon for transcript quantification</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:    Check the trinity documentation and find a perl helper script that can be used to quantify with salmon</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#           Submit this via sbatch with 4 CPUs, 20G of memory and a 2h hour run time </span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#           Ensure that you activate the transcriptomics_bbda conda environment</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#           Do not forget about strand orientation </span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#           use `--gene_trans_map  xxx/Trinity.fasta.gene_trans_map` to quantify on transcript as well as gene level</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#           add `--prep_reference` to build a target index</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:    - Check the trinity documentation and find a perl helper script that can be used to quantify with salmon</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Submit this via sbatch with 4 CPUs, 20G of memory and a 2h hour run time </span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Ensure that you activate the transcriptomics_bbda conda environment</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Do not forget about strand orientation </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Use `--gene_trans_map  xxx/Trinity.fasta.gene_trans_map` to quantify on transcript as well as gene level</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Add `--prep_reference` to build a target index</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup:</span></span>
@@ -3694,9 +3695,9 @@ Answer
 <span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co"># for the downstream analyses to your own computer</span></span>
 <span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> ... </span>
 <span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: use rsync to maintain a folder structure but have fine-grained control over what you want to access </span></span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Use rsync for efficient transfer with fine-grained control</span></span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         -a : archive mode (preserves permissions, timestamps, symlinks)</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: You can use rsync to download and maintain a folder structure </span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co"># but have fine-grained control over what you want to access </span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1:  -a : archive mode (preserves permissions, timestamps, symlinks)</span></span>
 <span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co">#         -v : verbose (prints progress)</span></span>
 <span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Keep directory structure but only include specific files</span></span>
 <span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co">#         --prune-empty-dirs : remove any empty directories from the copy</span></span>
@@ -3843,123 +3844,175 @@ Code example
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Locate the directory containing the salmon files</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dir <span class="ot">&lt;-</span> <span class="st">&quot;results/trinity/salmon_abund&quot;</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>folders <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(dir, <span class="at">full.names =</span> <span class="cn">FALSE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>folders </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the folder names:</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a data frame that contains the new sample names, i.e. treatment_rep1,</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># and the treatment (treated versus untreated)</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>condition <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">&quot;^treated&quot;</span>, folders), <span class="st">&quot;treated&quot;</span>, <span class="st">&quot;untreated&quot;</span>)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">run =</span> folders,</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition =</span> <span class="fu">factor</span>(condition)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>samples</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a named vector that points to the sample files</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">file.path</span>(dir, samples<span class="sc">$</span>run, <span class="st">&quot;quant.sf&quot;</span>)</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(files) <span class="ot">&lt;-</span> samples<span class="sc">$</span>run</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>files </span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># For gene-level summarization link the transcript to gene IDs </span></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># For this tximport needs a dataframe with two columns: transcript ID and gene ID </span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Trinity provides this file but in the wrong order, so we have to clean it up first</span></span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>tx2gene <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;results/trinity/trinity.Trinity.fasta.gene_trans_map&quot;</span>,  <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>tx2gene <span class="ot">&lt;-</span> tx2gene[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)]   <span class="co"># reverse the order of the columns</span></span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tx2gene) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;transcript&quot;</span>, <span class="st">&quot;gene&quot;</span>) <span class="co"># add a sensible header</span></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tx2gene)</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the files using tximport </span></span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>txi <span class="ot">&lt;-</span> <span class="fu">tximport</span>(files, <span class="at">type =</span> <span class="st">&quot;salmon&quot;</span>, <span class="at">tx2gene =</span> <span class="fu">as.data.frame</span>(tx2gene))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>folders </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;treated_rep1&quot;   &quot;treated_rep2&quot;   &quot;treated_rep3&quot;   &quot;untreated_rep1&quot;
+[5] &quot;untreated_rep2&quot; &quot;untreated_rep3&quot;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the folder names:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a data frame that contains the new sample names, i.e. treatment_rep1,</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># and the treatment (treated versus untreated)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>condition <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">&quot;^treated&quot;</span>, folders), <span class="st">&quot;treated&quot;</span>, <span class="st">&quot;untreated&quot;</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">run =</span> folders,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition =</span> <span class="fu">factor</span>(condition)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             run condition
+1   treated_rep1   treated
+2   treated_rep2   treated
+3   treated_rep3   treated
+4 untreated_rep1 untreated
+5 untreated_rep2 untreated
+6 untreated_rep3 untreated</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a named vector that points to the sample files</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">file.path</span>(dir, samples<span class="sc">$</span>run, <span class="st">&quot;quant.sf&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(files) <span class="ot">&lt;-</span> samples<span class="sc">$</span>run</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>files </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                          treated_rep1 
+  &quot;results/trinity/salmon_abund/treated_rep1/quant.sf&quot; 
+                                          treated_rep2 
+  &quot;results/trinity/salmon_abund/treated_rep2/quant.sf&quot; 
+                                          treated_rep3 
+  &quot;results/trinity/salmon_abund/treated_rep3/quant.sf&quot; 
+                                        untreated_rep1 
+&quot;results/trinity/salmon_abund/untreated_rep1/quant.sf&quot; 
+                                        untreated_rep2 
+&quot;results/trinity/salmon_abund/untreated_rep2/quant.sf&quot; 
+                                        untreated_rep3 
+&quot;results/trinity/salmon_abund/untreated_rep3/quant.sf&quot; </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For gene-level summarization link the transcript to gene IDs </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># For this tximport needs a dataframe with two columns: transcript ID and gene ID </span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Trinity provides this file but in the wrong order, so we have to clean it up first</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>tx2gene <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;results/trinity/trinity.Trinity.fasta.gene_trans_map&quot;</span>,  <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>tx2gene <span class="ot">&lt;-</span> tx2gene[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)]   <span class="co"># reverse the order of the columns</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tx2gene) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;transcript&quot;</span>, <span class="st">&quot;gene&quot;</span>) <span class="co"># add a sensible header</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tx2gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  transcript               gene                 
+  &lt;chr&gt;                    &lt;chr&gt;                
+1 TRINITY_DN33273_c0_g1_i1 TRINITY_DN33273_c0_g1
+2 TRINITY_DN33269_c0_g1_i1 TRINITY_DN33269_c0_g1
+3 TRINITY_DN33245_c0_g1_i1 TRINITY_DN33245_c0_g1
+4 TRINITY_DN33233_c0_g1_i1 TRINITY_DN33233_c0_g1
+5 TRINITY_DN33229_c0_g1_i1 TRINITY_DN33229_c0_g1
+6 TRINITY_DN33298_c0_g1_i1 TRINITY_DN33298_c0_g1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the files using tximport </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>txi <span class="ot">&lt;-</span> <span class="fu">tximport</span>(files, <span class="at">type =</span> <span class="st">&quot;salmon&quot;</span>, <span class="at">tx2gene =</span> <span class="fu">as.data.frame</span>(tx2gene))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="read-in-and-summarize-annotations" class="level3">
 <h3 class="anchored" data-anchor-id="read-in-and-summarize-annotations">Read in and summarize annotations</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in data</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>annotations_df <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;results/annotations/sequence_results_best_hit_desc.txt&quot;</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Since several genes can consist of more than one transcript, we will now condense the data by gene (by choosing the top hit)</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>annotations_gene_level <span class="ot">&lt;-</span> annotations_df <span class="sc">|&gt;</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract gene id by ignoring the _i.* part of the transcript name</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">gene =</span> <span class="fu">sub</span>(<span class="st">&quot;_i.*&quot;</span>, <span class="st">&quot;&quot;</span>, accession)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gene) <span class="sc">|&gt;</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(KO_bit_score), KO_e_value) <span class="sc">|&gt;</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the annotation data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>annotations_df <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;results/annotations/sequence_results_best_hit_desc.txt&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Since several genes can consist of more than one transcript, we will now condense the data by gene (by choosing the top hit)</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>annotations_gene_level <span class="ot">&lt;-</span> annotations_df <span class="sc">|&gt;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract gene id by ignoring the _i.* part of the transcript name</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">gene =</span> <span class="fu">sub</span>(<span class="st">&quot;_i.*&quot;</span>, <span class="st">&quot;&quot;</span>, accession)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gene) <span class="sc">|&gt;</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(KO_bit_score), KO_e_value) <span class="sc">|&gt;</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="generate-a-deseqdataset-object" class="level3">
 <h3 class="anchored" data-anchor-id="generate-a-deseqdataset-object">Generate a DESEQDataSet object</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a DESEQDataSet object</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">=</span> <span class="fu">DESeqDataSetFromTximport</span>(txi, <span class="at">colData =</span> samples, <span class="at">design =</span> <span class="sc">~</span>condition)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove uninformative columns</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># requires genes to have Y or more samples with counts of X or more (keep &lt;- rowSums( counts(dds) &gt;= X ) &gt;= Y)</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose: Y = 3 because thats the nr of replicates, and 10 a commonly used cutoff</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#keep &lt;- rowSums( counts(dds) &gt;= 10 ) &gt;= 3</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#dds &lt;- dds[keep, ]</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure that untreated samples are seen as the reference level</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>dds<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">relevel</span>(dds<span class="sc">$</span>condition, <span class="at">ref =</span> <span class="st">&quot;untreated&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a DESEQDataSet object</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">=</span> <span class="fu">DESeqDataSetFromTximport</span>(txi, <span class="at">colData =</span> samples, <span class="at">design =</span> <span class="sc">~</span>condition)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove uninformative columns (optional)</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># This step only keeps genes that have Y or more samples with counts of X or more (keep &lt;- rowSums( counts(dds) &gt;= X ) &gt;= Y)</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose: Y = 3 because thats the nr of replicates, and 10 a commonly used cutoff</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">rowSums</span>( <span class="fu">counts</span>(dds) <span class="sc">&gt;=</span> <span class="dv">5</span> ) <span class="sc">&gt;=</span> <span class="dv">3</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[keep, ]</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure that untreated samples are seen as the reference level</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>dds<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">relevel</span>(dds<span class="sc">$</span>condition, <span class="at">ref =</span> <span class="st">&quot;untreated&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="perform-quality-assessment" class="level3">
 <h3 class="anchored" data-anchor-id="perform-quality-assessment">Perform quality assessment</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform rlog transformation for explorative data visualization </span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>rld_blindTRUE <span class="ot">&lt;-</span> <span class="fu">rlog</span>(dds, <span class="at">blind=</span><span class="cn">TRUE</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a PCA plot </span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>pcaData <span class="ot">&lt;-</span> <span class="fu">plotPCA</span>(rld_blindTRUE, <span class="at">intgroup=</span> <span class="fu">c</span>(<span class="st">&quot;condition&quot;</span>), <span class="at">returnData =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>percentVar <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">attr</span>(pcaData, <span class="st">&quot;percentVar&quot;</span>))</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>PCA_plot <span class="ot">&lt;-</span> </span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2)) <span class="sc">+</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="fu">aes</span>( <span class="at">color =</span> condition), <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>, percentVar[<span class="dv">1</span>], <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>, percentVar[<span class="dv">2</span>], <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Plotted data using blind=TRUE&quot;</span>) <span class="sc">+</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_classic</span>()</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>PCA_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform rlog transformation for explorative data visualization </span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>rld_blindTRUE <span class="ot">&lt;-</span> <span class="fu">rlog</span>(dds, <span class="at">blind=</span><span class="cn">TRUE</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a PCA plot </span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>pcaData <span class="ot">&lt;-</span> <span class="fu">plotPCA</span>(rld_blindTRUE, <span class="at">intgroup=</span> <span class="fu">c</span>(<span class="st">&quot;condition&quot;</span>), <span class="at">returnData =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>percentVar <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">attr</span>(pcaData, <span class="st">&quot;percentVar&quot;</span>))</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>PCA_plot <span class="ot">&lt;-</span> </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2)) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="fu">aes</span>( <span class="at">color =</span> condition), <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>, percentVar[<span class="dv">1</span>], <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>, percentVar[<span class="dv">2</span>], <span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Plotted data using blind=TRUE&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_classic</span>()</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>PCA_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABUAAAAPACAMAAADDuCPrAAABVlBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrYXxckzMzM6AAA6OgA6Ojo6OmY6OpA6Zjo6ZmY6ZpA6ZrY6kJA6kLY6kNtNTU1NTW5NTY5Nbo5NbqtNjshN0tZmAABmADpmOgBmOjpmOpBmZgBmZjpmZmZmZpBmkGZmkJBmkLZmkNtmtttmtv9uTU1ubo5ujqtujshuq+SOTU2Obk2Obm6OyP+QOgCQOjqQZjqQZmaQkDqQkGaQkLaQtraQttuQ29uQ2/+rbk2rjm6ryOSr5P+2ZgC2Zjq2kDq2kGa2kJC2tma2tpC2tra2ttu229u22/+2///Ijk3IyKvI5P/I///bkDrbkGbbtmbbtpDbtrbbttvb27bb29vb2//b/9vb///kq27kyI7kyKvk///5gnr6n5n/tmb/yI7/25D/27b/29v/5Kv/5Mj/5OT//7b//8j//9v//+T///+KnnlnAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAgAElEQVR4nO3d/Ztb5X3g4TPY3oGx6WK3HgKp12RDN2C7IdB4nW3KAs0YpyU4LhnsFNihhYzHxjWy/v9f9rxKRy9H0nwlz1iP7vu64tH7kdDMJ+f1OVkfgJDstN8AwLoSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQh67gHNJBpIlIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKLCAlwun/SZeOAIKzPXyy39bkNAxAgrMUedTQicIKDDbMJ9lQk/77bxIBBSYTUA7CSgw02g/FbRNQIGZBLSbgAKzjPdTQVsEFJhFQGcQUGAWAZ1BQIFZBHQGAQVmEdAZBBSYyVb4bgIKzCSg3QQUmM2RSJ0EFJhNQDsJKDCH0Zi6CCgwl/FApxPQDWRscY7Pb800ArpxzEvAqgjohrE2C1ZHQDeL7amwQgK6WQQUVkhAN4pjSmCVBHSjCCiskoBuEuPqwEoJ6CYRUFgpAd0kAgorJaCbREBhpQR0kwgorJSAbhRb4WGVBHSjCCiskoBuFkciwQoJ6GYRUFghAd0wRmOC1RHQjWM8UFgVAd1AxhaH1RBQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIWlnefnx/t/STP41NQECBRK0sbz/cEFBgs6wsbw93fzp9AgIKJGplebu3++vpExBQIFGrytuzj1//3fQJCCiQqFXl7cf33/i3D3Z3//6LiQkIKJCoVeWt2YY0XJB/pSagQKJWlbeHu7vvfdf/r092B0vyAgokblV5+7beCH9v91djExBQIFGrztvD3Te/G52AgAKJWnXefrgxtie9gAKpWn1AzYECG2JFeXv2cb35feKAJAEFUrWqvN2rwjkI6XACAgokaoX7gb73Xf/JB+PbkAQUSNbK8vZtPRjT+KFIAgqkanV5e/IPu7uvv/fd+M0CCqTKiPQAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEEz89b7ZgUTEFAgUd15e/BWlr30x6f/452D5SYgoECiuvLWu51lZUCvZGf/uNQEBBRIVFfe9rLs7P/aeemPvf+dZeeWmQcVUCBVHXk7zLJr/adXXspnPu/vZNeXmYCAAonqyNtedrlfB7S/n20vMwEBBRI1PW+9m1sfDQJ6tPPSEmtBBRRI1fS8VemsA1r/iE5AQIFECShAUNcifLHhqC7n4VKb4QUUSFVH3soNR1VA85jaiAQwqSNvRzvZpYMyoI+uZsUGpfgEBBRIVFfe9rMsu7Cz9dr5/OflpSYgoECiOvP25U5WW6qfAgokqztvj+9cyOt55uLdJScgoECijAcKECSgAEHz8vb10hMQUCBRnXnr3Xm1PBgpW3IlqIACqerK2+FOVh3NmWVby4xmJ6BAsrp3pK8O4PzzrR070gNM0zke6Nlmyd2hnABTdY3G1JrrNB4owDSzhrObduX4ExBQIFHmQAGCOteBbk+9HJiAgAKJ6j4r58VvykuPb2fOygkwxYzzwmdbFy5cKMZkWmYGVECBZHXlrfdpM5rd1rvLTUBAgUR156334Of5HOhrv13ifEjlBAQUSJTRmACCBBQgaFbevm58s8wEBBRIVFfeHt3KhuxIDzCpI2/FMHYCCjBLR972s+zsLz5r/GGJLfECCqRqet6WHMJuZAICCiRqgcFElpyAgAKJWmA4uyUnIKBAoroW4c2BAszRuRHp8qomIKBAojryls+CXlvRBAQUSFTHIvxvfp5lW6+9Xfs7uzEBTOjaiJTZkR5gNgGFSd8XTvtN8OIzGhOM+/77vxQklHkEFEbV+ZRQ5hNQGDHMZ5nQ0347vNBm5K3XDAf64GfWgbIxBJTFGQ8U2kb7qaDMtNB4oOcElE0hoBxD93igW6/9fKf4X7bcMUkCyjoZ76eCMkvneKDnDop/rxctPbfMmY0FlHUioBzHzPFAqyFF9oqMxicgoKwRAeU4Zo4HeliOS3+41Oj0Aso6EVCOY05Ai6X3p1eWWYYXUNaJgHIcMwdUPtopOrrc8PQCylqxFZ5j6MjbXrn2s1oVWmU0PAEBZZ0IKMfQkbejnezi3WIz/OUiphbh2RyORGJxXXnbK48/OsyyrZ1sqdN7CCjrRUBZXGfeviwW3Ht75YFI9gNlgxiNiYXNyNu/593s3b9w4Z1l+imgrB/jgbIgw9nBJCPSr4v9aqyjsS01y224OQYBBdbXWEDv/1X549QC2vtNcQ7O/N82Z+UEXkijAW3CeWoBfXqleD9OKgesg/2RPJ1YOBsCCqyvFyygq5+AgALPi4AC9B/d2smyVz8cubp18W55JV8mvty7cz7Lzgz2qnzwVn73pYP2OtD9aom5ffjkvFdZVtex8PUUVzABAQXmquuXXRq9uvVucS1P319frW44W85w9m7WqxdvzQzonFdZXtdwdksNojwyAQEF5slTd+5uv3e7PnI8v3r2837/q7x3RYqKrTJb7x70H92s79/LS3tQPnzWVvh5r7K8meOBrmQCAgrMkbetTF4+Z1mNoVmXcHi9mqerzjZUjHZUFXB/VkDnvcoKzBwPdCUTEFBgjsM6bfmFoj37WVOgKpWDFOZpLFK412w6qnYb6gjovFdZgc6zcp5b0UpQAQXmGd2Y3gpcHr3t5t/BA/M5yO3RR04N6JxXWYWOvD3+NMvOvOZIJOAkjO5/1FrEri4W28+r6/v1jupNQGcciTTvVVahcyOSHemBkzIR0O2ReyYD2mwEmh3Qma+yCgIKnLq05kBXSECBeQarK6vZxilrL9vpi68DFVAgOYOt8Ec7xYX95mpxx+XJ9O23ejtrK/zsV1kBAQVO3WAPo72u/UBH0pdndru+erz9QE8woL2vaw9+Zh0o8Dwddh6JVJ1hfSx9+f0X704eiVTs+dn7ZtqRSFNfZXldeXt067gbkZ59cmN395dfTExAQIG55h0LP5a+2/Ux7f9nJKCHxW3bM46FP6GAjm6GP7fAtH58f7fwkz+NT0BAgfmmjsZ06ZvyypT0fTU5GlPufv6k7YPx0Zi6X2VZnUciZVuv/Xyn+F+2dW2RF7q3++YX/Scf77753dgEBBRIVNex8PVuVOX2sEUOu//hRjnv+eP7r/9ubAICCiSqa0f68iD8/XKGd2+Roe2+3f1p/fNXYxMQUCBRM4ezOyx3FTgcHg/V7d7ur8ufD+uQDicgoECi5gS02plq/jL8s4/rRfcfbjQrQV+pCSiQqJnjgR7tVHufzt9gJaDA5uk6J1K932nR0Sqjs7UCOrYjk0V4IFUdeTvaKffzvzlygrsZpsyBNhMQUCBRXXnbK48/OsyyrZ1Fzr8koMDm6czbl8WCe2+vPBBpgf1AbYUHNs6MvP173s3e/QsXFjoHfbP/p/1AgY2xqrw5EgnYOKvK27OPd99wLDywUbp2pL943LMaPzEaE7Bhuk8qt7XQus+hJ5/k/fzld+M3CyiQqo4jkW7vFJvfh2PzLTEBAQUS1Zm3B2+VAzkfe1F+YgICCiRq1jmR7p8vGnrm2vEW5ccnIKBAombn7fGdclH+r5ZIqIACqZqbt+LscsucPkRAgVTNyVvvzvlFz8rZNQEBBRI1K2+9B1eXXwkqoECquvP21Wo2wwsokKqOvJVnU86ys8vvCCqgQKq6j0Q69qFIHRMQUCBRnQG9+PmKJiCgQKI6DuX8wypmPqsJCCiQqOeeNwEFUiWgAEECChAkoMAL6fvCab+JOQQUeAF9//1fCi94QgUUeOHU+Vwqob07l5Z83GG2Pee5Agq8aIb5LBMae5H5+Zv3OAEF1o+ADiYgoMCxjPYzWlABBTbQ8QK6l10ufuwXtdvLrhenIrp4t9+7WYyHtJ1H8PL9nezsR/UQSa/Ww8uVJ307887B4HFj9+fP2bq2XEB79y8sf2pOAQWOZbyfcwo6GtAiWsUg8MOAvpZ38dxB/6gcYS7bul48+HZW2R4GdOT+vfLy28sEtHrh4rUNqAycmKUCWvQqn3283iyAH5b1LEdIupTPb35anmDjMNsqZgzvZ1sfNY8bv/9av7eXLRPQ/Xzu87ef/T6f0718rE8/NgEBBY5jqYCWtSxvagJaRLK+u/x5efCUfCZxENop9+d3xwNavXb5Bs45KydwUpYK6PbgchPQsl+9m1VH8yX1umeP//yPV7NBQEfuf3plNLrdxvPW+0Nz6emV+lxygwshAgocy1IBHV4eC2jWKHr26Gp9ZRjQ1v1N846/EenpleY0Hk2E8xcRUODkLLMVfjKgZQTLs2wMAlpsMNp69RefDxfhR+4/2okGtOjw2bv129q6+Nlnn93aWXBvqo4JCChwLM8loPUMYaFYuVnPlg4D2ro/Pgfa7xfnMi5Pxfm0mck9u8QMqIACx3WsI5EWCuhgm06hqWU+29lahJ+8//jrQAv389nbSwfFMfbFjlFbl5Y6vYeAAsd0rIBWmas2mXcGNL+p2nhUrBNtAnmYDbfWt+9fcit8Uc76nJxfL/Z5Z0xAQIFjOs5oTHkGr/Uf3cwmA1oksQloPrd57m6/2kW0WoTvfZrVAS0e176/WEd6ud+7Hd4PtHe7OJDJaY2B07H4eKDVBvSX/mU8oEflEUiD9ZiH1ZFGWTF23WF18dynw8eN3F/sBb/ckUiPbmXZmWsLftZZExBQIGDhEel7t4pN34fjAe1/udMOaH2se7WXUbGpJ+9bNfNZPm70/v7988seC18k9OxyB8L3BRRI15S8Pb7z1oVX3/mmX+1sWu/TFJ+AgAKJmszbfr3zUjknPNinKT4BAQUSNZG3wyzbuvD2heoYp/5wn6bwBAQUSNSUI5GqsZeavaKKfZocygkwafJY+MkhRHq/F1CACZMBHQzqtMx8Z2sCAgokaiJve9nZzw/6va+uLjWESGsCAgokaiJv9YlBsqw1NslSExBQIFGTeatHGl12/8/BBAQUSNS0vPX+/NkfVnEYfDUBAQUS5bzwAEECChA0I2/FMfEXLn6+7AQEFEjUxJFIv3n776r1n80x8WeX2xovoECqJnekr8/BWfbzwvlif6brU563+AQEFEhUV0CLEZv/pjgv0u1sqbMaCyiQrK6A7jVnAymGy7+8zAQEFEhUR0DzH82RSIdZMy5TbAICCiSqO6DNgnvrYmgCAgokqiOg+YK7gALM1LUOdH+wCH+0YxEeYIopAc1e+6evi5/13kt7808uP3MCAgokalpAC2cuVPOdvU+XHNhOQIFUTeTtq9//vB4RtN6YtNxeTAIKJGt63r7+15+fH+zO9O5yExBQIFEz8vZNvzg0/sMlRwYVUCBVhrMDXkgvF077TcwhoMAL6OWX/7bwgid0at56X3/durLcCT4EFDiuOp8LJbR359JCr9n9uMPwrppT8nZUnlXuYnNSOUciASdrmM8yobMfvGj+uh+3yoAeNqc1rre+CyhwstY3oMV54c/+02e38h/V/K6AAidqtJ/zCvpCBXSvHr3uUTMOqIACJ+o4AS1GLC4ONz/MLt/fKc9A9KiY/Xu1Xgf54K3iwMp3DgaPG7s/f87WtdUFtJjK9ZFLAgqcpPF+zizoMKCv7ZRzf0fVoZTVqYhu12skt4cBHbl/r7z89soC2splPsHiKHgBBU7SsQLaLIA3I7/nwbp0UAziUWTrMNv6ML/tfpmy6nHj91/r95YYMGlGQOvLAgqcpGBAq1GP9usY7herIPeq9ZD5zOD15nFT7s/vXuEi/HDwpbLpAgqcpGBAq/HjbtYBO9qpxzF+/Od/vJoNAjpy/9Mro9E9vmkbkYajL+3ns7YCCpyk5QKaNYpuPbpaXxkGtHX/0ytV21a4Ff5wZPzPPKev7QgocIIiuzHVEWxGNK4CWmww2nr1F58PF+FH7j/aWXlAy81Sw2LezrLlTgwvoMDxLBXQ1gxgsXKzni0dBrR1/3OYA+33bo8U88sdAQVOVOBIpDqCVStrTS2rMxQ1i/CT969wHWju8Z2ftYr5+LaAAicpHtA8htXGo8NsuJHosNyy02yFH96/+q3wKyegwHEdZzSmavNRE9B8bvPc3fIIo+v1InxxYrcqoMXj2vcX60gvlwvdAgokZPHxQI/KI5AG6zEP65O6FWN51EMjnfu0OQQpT2j7/mJHo5UeibRyAgpELDwi/Zc77YDWx7p/WF5+cDXLzlyrZz7Lx43e379/fqXHwq+cgAKpElCAIAEFCBJQgCABBQgSUIAgAQUIElCAoOl56/35sz8cTLkcmYCAAomanrfJE3vEJyCgQKIEFCDIIjxAkI1IAEECChAkoABBU/PW+/rr1hXrQAGmmZK3o/JMyhfv1ldthQeYajJv9SD42da71XUBBZhqIm/FeUPO/tNnxaD35TlDBBRguom87WXVWT8f3SxPZCegAB3G89bLu3l95JKAAkw1nrdWLvOCFmelF1CAqWYEtL4soABTTVmEL2Y7K4fF+lABBZhq2kaky4Mr+1m2LaAAU03kLZ/rHM6CFjl9bUdAAaaYzFvezFYxb2cjVwMTEFAgUZN5690eKeaXOycY0JcL8WkBnKRpeXt852etYj6+fVIBffnlvy1IKLAeXpzh7Op8SiiwLl6YgA7zWSb0+b4pgBWYnrfH31Q/j179cImhQKsJCCiQqGl5e3S12RV0P8u2ri05gcUCOtpPBQXWwJS83d/Jsu3q4qfFTkyXJx9ynAkIKJCo6QMqn/28vlLs01SPzhSdwEIBHe+nggIvvom8Pb0yOs+5v9xuoAIKJGsib/v1gMqN3s3lFuIFFEhV94DKjcOxoh53AgIKJGrKeKCtsUQKRycxmIiAAutn1oDKXbccbwK2wgOJElCAoJkj0pfyRfjnvw7UkUjA+pk9In1hf7BbfWwCAgokatqI9KewG1PfaEzA2pm7I/3eiexIXzIeKLBWph/KeamZB310a9mD4Y1ID6RqSt72ixFEzv72s88+u3O1uLjMGlDnRALSNS1vxWmQBrbeXXICAgokamreygX3Kp+Xvll2AgIKJKorb1/962/e/sVny9azL6BAul6YcyIBrJuOvK1g1rOZgIACiZqSt97tYiPSmWvLnk6unoCAAomazNtRsw3+7DL7zw8nIKBAoqYeiZSd+e/ns+XGUR5OQECBRE07pUc5HNODnSXPJtdMQECBRHWf0mPJUZgGExBQIFHd44EuOQ7oYAICCiSqe0T6JUeiH0xAQIFECShAkIACBAkop+f7wmm/CYgTUE7L99//pSChrC8B5XTU+ZRQ1pmAciqG+SwTetpvB0KmBHTSMiEVUKYRUFIgoJyG0X4qKGtq4kik37w96e+WOCJJQJlCQEmCEek5BeP9VFDWk4ByCgSUNAgop0BASYOAcgoElDQIKKdAQEmDgHIabIUnCQLKaRBQkiCgnApHIpECAeVUCCgpEFBOh9GYSICAclqMB8raE1BOjxHpWXMCChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQtLK8/fj+buknfxqbgIACiVpZ3n64IaDAZllZ3h7u/nT6BAQUSNTK8nZv99fTJyCgQKJWlbdnH7/+u+kTEFAgUavK24/vv/FvH+zu/v0XExMQUCBRq8pbsw1puCD/Sk1AgUStKm8Pd3ff+67/X5/sDpbkBRRI3Kry9m29Ef7e7q/GJiCgQKJWnbeHu29+NzoBAQUStWTeHo6t+Oz/cGNsT3oBBVK1+oCaAwU2xIry9uzjOqITByQJKJCqVeXtXhXOQUiHExBQIFEr3A/0ve/6Tz4Y34YkoECyVpa3b+vBmMYPRRJQIFWry9uTf9jdff2978ZvFlAgVUakBwgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQhaNm8/vv/T+tKzT27s7v7yi4kJCCiQqGXzdm+3DuiP7+8WfvKn8QkIKJCo5fL27N5uE9B7u29+0X/y8e6b341NQECBRC2Vt//8YLcJ6A83ynnPH99//XdjExBQIFHL5O3b3d33/qMO6LeDn78am4CAAolaKqBv/HP/YR3Oe7u/Ln8214cTEFAgUcvmrQ7ms4/rRfcfbjQrQV+pCSiQKAEFCFp9QMd2ZLIID6Tq+c2BNhMQUCBRx8/bw3KH+XqbkYACm2tFAbUVHtLyfeG038QLb0WL8IP9P+0HCgn4/vu/FCR0jlUF1JFIkIw6nxI616oC+uzj3TccCw8pGOazTOhpv50X2aoC2n9iNCZIg4AubGUB7T/5JO/nL78bf4CAwnoZ7aeCzmJEemCEgC5OQIG28X4q6AwCCrQJ6DEIKNAmoMcgoECbgB6DgAJtAnoMAgqMsBV+cQIKjBDQxQkoMMqRSAsTUGCUgC5MQIExRmNalIACE4wHuhgBBaYwIv0iBBQgSEABggQUIEhAAYIEFCBIQAGCBBQgSEABggQUIEhAAYIEFCBIQAGCBBQgSEABggQUIEhAAYIEFCBIQAGCBBQgSEABggQUIEhAAYIEFCBIQAGCBBQgSEABggQUIOgEAgpsoOedlhfC8/+Up/01rsIrr5z2O1iZdD5KOp8k0Y/y3NPyItiMT7msV1457XewMul8lHQ+iY+yvgR0EQn9VqTzUdL5JD7K+hLQRST0W5HOR0nnk/go60tAF5HQb0U6HyWdT+KjrC8BXURCvxXpfJR0PomPsr4EdBEJ/Vak81HS+SQ+yvoSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIEtD5fnz/p/WlZ5/c2N395Ren+m6W9OP7u6Wf/Om038lSEvgmaol8IYn9mSxMQOe7t1v/ZtS/62v9q/7DjRT+XlP4JmppfCH9xP5MFiag8zy7t9v8ZtzbffOL/pOPd9/87nTf0jIeNh9mraXwTdTS+EJS+zNZmIDO8Z8f7Da/GT/cKP9P9cf3X//d6b6nZdzb/fVpv4XlJfFN1JL4QpL7M1mYgM727e7ue/9R/2Z8O/j5q9N8S0t59nEKv9YpfBO1VL6QtP5MFiegs337xj8PFrKaeYV1Xuj68f03/i2fWfj79V7Dn8I3UUvjC0ntz2RxAjpf/ZswmFf44cb6rt1pNlms9XJjEt9ELYkvpJTSn8niBHS+lH4zHubLWt/1/+uT3XVecEzim6gl8YWUUvozWZyAzjf5m7G+e2h8O1jOWmGjOfYAAAwjSURBVOMVVEl8E7UkvpBSSn8mixPQ+VL8v9aH67yTSVLfRG2tv5BSin8m8wnoNA9HVksl8JvxcHw921rPHqzzN9Flrb+QUgJ/JgECOs3UgK7z5sUpAV3n3+41/ia6rPcXUkjgzyRAQOd7OLZj2xrv4Pbs4yR+uxP4JmqJfCGFhP5MjkFA53uY0CEW95rlrLXebSaFb6KWxhdSSOnPZHECOl/zm5H/kr+x7gf5/nCj2GvmyQfr/BnS+CZqaXwhhZT+TBYnoPMNlq6eJDDMzLf12D/rfeRLCt9ELY0vpJ/Yn8nCBHS+4eqpJ5/kvxi/XO//Y33yD7u7r7+33p8hjW+ilsYXktqfyaIEFCBIQAGCBBQgSEABggQUIEhAAYIEFCBIQAGCBBQgSEABggQUIEhAAYIEFCBIQDfAXtbYevXD1u0Pbu3kt7364cHIo492tjtf6au3yic0Vw8HL3y5vP4ov/vMteFkL4ff8LmD+Y+CUyegG2AY0NwgTQ/OD7J6rfXg3s2sM6C3x15jfzSgRzvl5UvVnUc7L/0x/IYFlLUgoBtgJKBNm/bbtw1nFfN+dgZ0+JTt8Re+XF196W7xoOv1ndEZUAFlXQjoBhj2qPdpVvetiOGZd77pV4vlWx/VD310NesM6NMr+bxq/kL3d+rHj82s5jOg14c3Hoog6RPQDdCeoduv+lgsbV86GN5WPaB3ZyfrDuhh09nDeo4zL+r1yfurqeUdvT7lNSApAroB2gHNy1lc2RvJ5F6VvmLxfev/zlgHWsvDWc9kDuZcW1erqZkBZRMI6AZoBzSPX36lWBpvte/o1V/c7ZcBvXTQWi4frM4ckz/7cnX/yGaidkCnzoDuNY/P7y3f0VflbgAX3jmob7z+4GqWnflo+IZHHlBMtnfnfLHqofk4j4r7h3sFlFe3Lt49xn8bWIaAboCxOdDtciF8ymxm7/d3R1ZsdgW0mfPMX/f/3c6TVRervQ50f9rrHzavlz8yL3Cv2aifnS26mj/x7eJKHtn6DY89IA/oX19tXR9u1brUH7naXIfnTUA3wNg60MvNv1PNDejj2/WT80ee2WlthM+vl1vh87o+vTKycF9r5lyrxxQvX6yGLbZbbffrFQgf9R99OHjDYw/In55tvXvQf3Qza+aAs3N3y8w2V4uUF+9PQTkZAroBhgH96lbWtKtrE8+s/UD71VzeVrXMXARt2n6glztmQAdvpFqCb9ak1msVyoBebz9u/AHF9K73B89vbi7D/cdm3rp6j9PyDasnoBtgdD/QojLxgH564UKzAT8v1tniKKZHt7J65WZxqTgSqZwB7eVL91uXRrYk1cv+1bL+YBNUHcD6R/WGq+1Qow9ogtmsTB2sETis/0+hefqcjwArI6AbYCSgl+qF42BAC/d3xh6yN/ZyxT70xQzlcG1lpd7vaWzjU93DZstSf3JH+r0moINZzOL66Mu037cd8TkhAroBhgE9U2/vOVxoHWinw7FgDtNWKg/izB9zrbVY3byT7dFHP/7qs9+cz5qAbg8eNghg6wGDVah1Okcz2V6hkGXho0jhOAR0A0zOkNV7gw58+dtvmouLBHQsmOPPqWdAq3UFY3s6lWmtF83vn2/3bkpARx8goLxwBHQDTAZ0bD/Q4drFxQI6/pjR60c71SaionZj+9qXK0eHm5KKfTzf/u03e9MDOv6AuQG14pOTJqAbYMoqwf2RHUHbezV1B3SwH3wdq+H1ar/O4Qtc73cEtJg5He6G3xxM2hHQ8QdMBnS4X/52exUqnBQB3QBTAjpyLPz99iJvd0CHmd0b3Zk0f0ork4fNPkbTAprfeX9w3Gj9rvKHTgvoxAPGA9reL//64HjUkZeG50tAN8C0jdLl/pzFaEy9B29lY+PZdY/GlF36ptqxvQ5aef2rq61RRgcHce5NWweaP+el/1m9/rBy+9PXgU48YDyggxUPe81+oPXjx7dxwfMioBtg6l49t9vbXFpH7sw4Eqk1hOj10esjM6Db9c8pW+GrPQKuN69WzAMX+S2f37UIP3jAeECLSYwdiXT2w2rIPjOgnAwB3QDTd4v8cmeQv3dbN886lLMpZjOE/f5kPwcHcdb7gY5P+XCwuuBpfVx7dvHTrD2Q6OANjz9gIqCdx8LrJydEQDdAx37lvd+/1RrraHDrrGPhy+GOqnGY29dbLzA8iLMYXHTsSKR+u4L9cmSlrYuf19ukJndjGnvAZEAnR2Mq9nsaOe8TPE8CChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKECSgAEECChAkoABBAgoQJKAAQQIKiznaqU87X57H+emV+tTKA707lwb/TnM4OG1z9y3dz+6wPzhLdKe94cmpyzfd9ZSJd7OftVwuTivd/Aeozlbd+k9QXRz8F8omToidKgGFxbTycO5gSkCrAE1GcfT+494yx6kENMvKzy6gAgqLOto5V8549R/slDl5IQK6gPGAdpk+7eFThpfy/wDb/akBrf8LbQ4BhcUM83CYz4FtckDz/xTFRQEVUFjUMA9FLup6PLqVL65evNvv924WC67/rfx3u7wjX5599W71hPs72da1kUC1b3nwVr1itTd49uCmxl613L1fvXZx74Vr1Q2Xy0TeP1+9jfyN3M6ys3dby+n5vQ/OZ1uDFbeTT5ny/gamBrS6KKACCouaFtDDaq3f1vXxgB4N7ugXtSq83QpU+5bb9VrD7WFAhzcNnzAMaLOqcbs/COiFwZrJ6jW2ft4O6NvNw9sBHT6l9W6qZ7enPTWgh5mAVgQUFtNehD93UCYjT9nFb4p5vq2PRhfhn17JLuVzlJ+WoTnMZ+/6vb1WD9u35Jc/zG+6P/IarZsqrYDmkfubg2JFZHFvXcNs+6CYjbxe3JA/99HVrB3Q7Nzd6t52QIdPab2bhQLau28daENAYTFNHop+XG5aVGVmryrhMKDNHXWsipjlbRoEtH1Lncb8yvXm2SM3tZ9Rvu7TK8OuNhMo31nxmPo5RzvtgJad22+qP/6UKe+vpR3Q4Tb28smztsJvSkkFFBYzuRvToHDFLGk7oL2bdeOK6DbB2x8EauKWx3/+x6vZMKAjN1VG50DPft7cXtdwu7mzqfxeO6CXq4nW6x3GnzL5/tqmBfTMtbn7gQoo0DbIw6vF8nXVo7qTZT9GAtraY7LpzGEroO1biuXtZtfJ+jHtmyrtdaDl/plnf3tQ3XB55M7D9qxv89TyVYqotwPamqMdf39t44vwvU8HKxYswgsoLGo0D60t8ZMBbS3tvvTHap+fdqBGbim6vPXqLz5vLcKP3FQZ2QpfbD/PFccDrSCg7XezyDrQ/abrAiqgsKhpAe2YAx1ZTTl7DrRY9Vi8bGsd6OhNlZGA5nf9/q2s3E40GdBzwznT5qmLz4EutBGpXqna/pRVhAUU6DAZ0BnrQFuHMs5eB9pczmdar4/lt7qpMhbQfrksnU90cnayax1o0biOgC66DnQwv109svUpq24LKNBhMqCztsJXjy3DMnMrfJOvw3KGciSgh619kaoplc9oFrnL9zNewzpqeeNaAS3fy2Bmc/wpi2+Fby41C/HNpyyee3niv9BGEFBYzJSAVvuBPr5V78NZ3F/9mwfs3N1+vZ9luU9RcYDQ9vClBrdUy+v57GQd0HMHYzdV8phe6z+6WT+jeO1HN6sNSpfHtzDl72V8P9Bil89sbD/QkR3zx95fy7SAFu/goPoY5f4AX12tFuoFFOgwJaCtI5GqTT/nDqp/mzuycnS6/cGRPo3WLYf1fj+fNluUzh2M3FSpVk6+9C/tI5HO/nFKQLuPRLrU7wjolPc3/jlHLw12M20+Zb1hvj0a04akVEBhMdMCOjwWPvflTpGN6t/6WPgPqwffPz9xLPzwlgdXiz0r61nX6tkjN1V6t4pD3A+Hx9lXR8pP1rA6Fn5kHej18lj3fmdAp7y/8c85cmm4Hal3p9ghoDloX0CBFOxtyoCcp0xAISH1FqaR/ah4fgQUElLsYnRQjAyyIYvQp01AISX321t1eN4EFJJSjMW8VW/W4nkTUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUIElCAIAEFCBJQgCABBQgSUIAgAQUI+v/WGbo5laoa3gAAAABJRU5ErkJggg==" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="identify-degs" class="level3">
 <h3 class="anchored" data-anchor-id="identify-degs">Identify DEGs</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run DESEQ</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract DEGs</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>res_table <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast=</span><span class="fu">c</span>(<span class="st">&quot;condition&quot;</span>, <span class="st">&quot;treated&quot;</span>, <span class="st">&quot;untreated&quot;</span>), <span class="at">alpha =</span> <span class="fl">0.05</span>, <span class="at">lfcThreshold =</span> <span class="fl">0.58</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply log2-shrinkage </span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>res_table_unshrunken <span class="ot">&lt;-</span> res_table</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>res_table <span class="ot">&lt;-</span> <span class="fu">lfcShrink</span>(dds, <span class="at">contrast=</span><span class="fu">c</span>(<span class="st">&quot;condition&quot;</span>, <span class="st">&quot;treated&quot;</span>, <span class="st">&quot;untreated&quot;</span>), <span class="at">res =</span> res_table, <span class="at">type=</span><span class="st">&quot;ashr&quot;</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the results </span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res_table, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert table to tibble</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>res_table_tb <span class="ot">&lt;-</span> res_table <span class="sc">|&gt;</span> </span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;gene&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>()</span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset DEGs only</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>res_table_sig <span class="ot">&lt;-</span> res_table_tb <span class="sc">|&gt;</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Add annotation info </span></span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>res_table_sig <span class="ot">&lt;-</span> <span class="fu">merge</span>(res_table_sig, annotations_gene_level, <span class="at">on =</span> <span class="st">&quot;gene&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to file </span></span>
-<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(res_table_sig, <span class="st">&quot;results/trinity/degs.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run DESEQ</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract DEGs</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>res_table <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast=</span><span class="fu">c</span>(<span class="st">&quot;condition&quot;</span>, <span class="st">&quot;treated&quot;</span>, <span class="st">&quot;untreated&quot;</span>), <span class="at">alpha =</span> <span class="fl">0.05</span>, <span class="at">lfcThreshold =</span> <span class="fl">0.58</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply log2-shrinkage </span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>res_table_unshrunken <span class="ot">&lt;-</span> res_table</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>res_table <span class="ot">&lt;-</span> <span class="fu">lfcShrink</span>(dds, <span class="at">contrast=</span><span class="fu">c</span>(<span class="st">&quot;condition&quot;</span>, <span class="st">&quot;treated&quot;</span>, <span class="st">&quot;untreated&quot;</span>), <span class="at">res =</span> res_table, <span class="at">type=</span><span class="st">&quot;ashr&quot;</span>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the results </span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res_table, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+out of 16282 with nonzero total read count
+adjusted p-value &lt; 0.05
+LFC &gt; 0 (up)       : 35, 0.21%
+LFC &lt; 0 (down)     : 1, 0.0061%
+outliers [1]       : 4, 0.025%
+low counts [2]     : 3473, 21%
+(mean count &lt; 10)
+[1] see &#39;cooksCutoff&#39; argument of ?results
+[2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert table to tibble</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>res_table_tb <span class="ot">&lt;-</span> res_table <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;gene&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>()</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset DEGs only</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>res_table_sig <span class="ot">&lt;-</span> res_table_tb <span class="sc">|&gt;</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add annotation info </span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>res_table_sig <span class="ot">&lt;-</span> <span class="fu">merge</span>(res_table_sig, annotations_gene_level, <span class="at">on =</span> <span class="st">&quot;gene&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to file </span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(res_table_sig, <span class="st">&quot;results/trinity/degs.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </div>

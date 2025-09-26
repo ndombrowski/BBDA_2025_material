@@ -95,7 +95,7 @@ Advantages:
     $SLURM_ARRAY_TASK_ID
     ```
 
-* We can use this variable to pick the right line in a file
+* We can use this variable to pick the right line in a file or in a list of files that we generate with `ls`
 
 ::: {.fragment}
 * Example: Extract the sample ID from `metadata.txt`:

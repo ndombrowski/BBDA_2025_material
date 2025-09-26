@@ -23,9 +23,9 @@ bibliography: config/references.bib
 
 ## Today's aims
 
-In the first part of this tutorial you familiarized yourself with the data, performed quality filtering and started a de novo assembly with Trinity. Today, we will:
+In the first part of this tutorial you familiarized yourself with the data, performed quality filtering and started a de novo assembly with Trinity. Today, you will:
 
--   Assess the quality of your assembly
+-   Assess the quality of the assembly
 -   Perform gene prediction and annotation
 -   Identify differentially expressed genes
 
@@ -97,7 +97,7 @@ How does your assembly compare to the numbers reported in the paper?
 ## Answer
 
 1.  Comparison to the paper:
-    1.  Your assembly likely produced around 80,000 transcripts, which is fewer than the \~170,000 reported in the original study. The difference is expected because we worked with subsampled reads to reduce the computational load. This is a good example for how reducing sequencing depth might results in an under-representation of lowly expressed transcripts.
+    1.  Your assembly likely produced around 80,000 transcripts, which is less than the \~170,000 reported in the original study. The difference is expected because we worked with subsampled reads to reduce the computational load. This is a good example for how reducing sequencing depth might results in an under-representation of lowly expressed transcripts.
     2.  The N50 value should be around 2,200 bp, which suggests the assembly quality is in line with the original study despite having fewer input reads.
 
 🔎 **Good to Know**
@@ -191,9 +191,9 @@ conda deactivate
 ::: {.callout-note title="Question" appearance="simple"}
 After BUSCO completes, answer the following:
 
-1.  Is the assembly complete?
+1.  How complete is the assembly?
     -   Look up how BUSCO defines completeness.
-    -   Are there limitations to using BUSCO for transcriptome assemblies?
+    -   Are there limitations to using BUSCO to assess the completeness of transcriptome assemblies?
 2.  How many duplicates are there?
     -   Does this number seem unusually high?
     -   Should we be concerned about this number?
@@ -211,9 +211,9 @@ This means that BUSCO searched for 255 marker genes and of these:
 -   2.4% of markers were fragmented
 -   4.3% of markers were missing
 
-A genome completeness score above 90% is considered good. However, note that BUSCO assesses completeness by looking for a lineage-specific number of marker genes. In our cases that are 255 genes that are specific for eukaryotes. 
+A genome completeness score above 90% is considered good. However, note that BUSCO assesses completeness by looking for a lineage-specific number of marker genes. In our cases that are 255 genes that are specific for eukaryotes. This means that only 255 genes are used to evaluate the completeness of a transcriptome that consists of several thousand genes.
 
-Marker genes are selected as those that are present in at least 90% of the species in a given lineage, and present in a single copy in 90% of those species. These genes are mostly housekeeping genes, such as ribosomal proteins, which are usually highly expressed and easy to assemble. Therefore, high BUSCO scores do not guarantee that all relevant or condition-specific genes were captured. Genes that are poorly expressed or not expressed at all under your experimental conditions may still be missing from the assembly.
+Marker genes are selected as those that are present in at least 90% of the species in a given lineage, and present in a single copy in 90% of those species. These genes are mostly housekeeping genes, such as ribosomal proteins, which are usually highly expressed and often easier to assemble. Therefore, high BUSCO scores do not guarantee that all relevant or condition-specific genes were captured. Genes that are poorly expressed or not expressed at all under your experimental conditions may still be missing from the assembly.
 
 **2. Duplication rate**
 
@@ -223,32 +223,32 @@ Around 77% of the detected marker genes were duplicates, which seems high. Howev
 
 ## Annotation
 
-After assembly and quality control, we can translate the transcript sequences into predicted coding sequences (CDS), identify proteins and then annotate their biological function. In the next section you will do the following:
+After assembly and quality control, we will translate the transcript sequences into coding sequences (CDS), identify proteins and then annotate their biological function. In the next section you will do the following:
 
--   Gene calling using TransDecoder
--   Functional annotation using HMMER with the KEGG database
+-   Perform gene calling using TransDecoder
+-   Do a functional annotation using HMMER with the KEGG database
 
 ### Gene calling
 
-We will use [TransDecoder ](https://github.com/TransDecoder/TransDecoder/wiki) to identify likely coding regions (open reading frames, ORFs) and predict proteins from our transcriptome assembly [@haas2025].
+We will use [TransDecoder](https://github.com/TransDecoder/TransDecoder/wiki) to identify likely coding regions (open reading frames, ORFs) and predict proteins from our transcriptome assembly [@haas2025].
 
 ```{bash}
-# Prepare a output folder
+# Prepare an output folder
 ...
 
-# Run transdecoder 
+# Run TransDecoder 
 # Hints:  - Transdecoder can be accessed via the `transcriptomics_bbda` environment
-#         - Transdecoder consists of two steps 
+#         - Transdecoder consists of two steps that are run separately 
 #               1. `TransDecoder.LongOrfs` to find long open reading frames 
 #               2. `TransDecoder.Predict` to predict cds and proteins
-#         - ensure that you account for stand information 
-#         - make use of the gene to transcript map in step 1
-#         - ensure that in step 2 you only produce a single output cds sequence/transcript to simplify our analysis
-#         - use srun with 1 CPU and 20G of memory
+#         - Ensure that you account for stand information 
+#         - Make use of the gene to transcript map in step 1
+#         - Ensure that in step 2 you only produce a single output cds sequence/transcript to simplify our analysis
+#         - Use srun with 1 CPU and 20G of memory
 ...
 
 # Use cut to simplify the header of the protein sequences and to 
-# remove everything after the space
+# remove everything after the space.
 # That is a useful habit in order to keep protein (and names in general) short and simple
 ...
 ```
@@ -281,24 +281,25 @@ conda deactivate
 
 ### Functional annotation
 
-Next, we will functionally annotate the predicted proteins by comparing them to the [KEGG Orthology (KO) database](https://www.genome.jp/kegg/pathway.html) using HMMER's [hmmsearch ](http://eddylab.org/software/hmmer/Userguide.pdf)[@Finn2015, @Kanehisa2000]. This will allow us to link each transcript to a potential function.
+Next, we will functionally annotate the predicted proteins by comparing them to the [KEGG Orthology (KO) database](https://www.genome.jp/kegg/pathway.html) using HMMER's [hmmsearch algorithm](http://eddylab.org/software/hmmer/Userguide.pdf)[@Finn2015; @Kanehisa2000]. This will allow us to link each transcript to a potential function.
 
-Note, this will run for 1-2 hours. So once the job started successfully, you can proceed with the following steps. You only will need the results of this analysis once you finished the DEG analysis.
+Note that this will run for 1-2 hours. So once the job started successfully, you can proceed with the following steps. You only will need the results of this analysis once you finished the DEG analysis.
 
 ```{bash}
 # Write a sbatch script to run a hmmsearch to compare your proteins against KEGG profiles
 # Hints:  
 #         - The KEGG database can be found at 
 #           `/zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/KO_db.hmm`
-#         - Generate a table of per-sequence hits
+#         - Use a setting to generate a table of per-sequence hits
 #         - add this setting: --notextw 
 #         - use at max 10 CPUs, 20G of memory and 4 hours of run time
 mkdir annotations/KEGG/
 ...
 
 # Filter the HMMER results to keep only the best hit per transcript
+# The code below does the following:
 # Step 1: Convert consecutive spaces to tabs 
-# Step 2: Remove header lines (those starting with "#")
+# Step 2: Remove lines starting with "#"
 # Step 3: Extract columns of interest: transcript ID, target name, bitscore, and e-value
 # Step 4: Keep only hits with e-value <= 1E-3
 # Step 5: Sort first by transcript ID, then by highest bitscore and lowest e-value
@@ -313,7 +314,7 @@ sed 's/ \+ /\t/g' annotations/KEGG/sequence_results.txt | \
 # Step 1: Inside `<()` sort both files to prepare them for 'join'
 #         - sequence_results_best_hit.txt is sorted by column 2 (KO ID)
 #         - ko_list is sorted by column 1 (KO ID)
-# Step 2: Use 'join' to combine the two files on these columns
+# Step 2: Use 'join' to combine the two files on the KO ID columns
 #         - -1 2 : match column 2 of the first file
 #         - -2 1 : match column 1 of the second file
 #         - -a1 : keep all rows from the first file, even if no match is found
@@ -393,7 +394,7 @@ rm temp
 1.  Transdecoder output:
     1.  We started with \~100,000 thousand transcripts and ended up with \~55,000 proteins
     2.  We have less proteins than transcripts because
-        1.  Not all transcripts contain coding sequences (CDSs)
+        1.  Not all transcripts contain coding sequences (CDS)
         2.  Short transcripts, potential artifacts (e.g., chimeras), or untranslated regions will not result in a protein sequence
 2.  KEGG annotation output:
     1.  We work with \~55,000 proteins and of these \~40,000 should be assigned to a KO (\~75%)
@@ -426,12 +427,12 @@ In this section, we will make use of a Trinity helper script to quantify transcr
 
 ```{bash}
 # Write an sbatch script to run salmon for transcript quantification
-# Hints:    Check the trinity documentation and find a perl helper script that can be used to quantify with salmon
-#           Submit this via sbatch with 4 CPUs, 20G of memory and a 2h hour run time 
-#           Ensure that you activate the transcriptomics_bbda conda environment
-#           Do not forget about strand orientation 
-#           use `--gene_trans_map  xxx/Trinity.fasta.gene_trans_map` to quantify on transcript as well as gene level
-#           add `--prep_reference` to build a target index
+# Hints:    - Check the trinity documentation and find a perl helper script that can be used to quantify with salmon
+#           - Submit this via sbatch with 4 CPUs, 20G of memory and a 2h hour run time 
+#           - Ensure that you activate the transcriptomics_bbda conda environment
+#           - Do not forget about strand orientation 
+#           - Use `--gene_trans_map  xxx/Trinity.fasta.gene_trans_map` to quantify on transcript as well as gene level
+#           - Add `--prep_reference` to build a target index
 ...
 
 # Cleanup:
@@ -454,9 +455,9 @@ python scripts/parse_salmon.py -i logs/salmon_*.err
 # for the downstream analyses to your own computer
 scp ... 
 
-# Hint: use rsync to maintain a folder structure but have fine-grained control over what you want to access 
-# Step 1: Use rsync for efficient transfer with fine-grained control
-#         -a : archive mode (preserves permissions, timestamps, symlinks)
+# Hint: You can use rsync to download and maintain a folder structure 
+# but have fine-grained control over what you want to access 
+# Step 1:  -a : archive mode (preserves permissions, timestamps, symlinks)
 #         -v : verbose (prints progress)
 # Step 2: Keep directory structure but only include specific files
 #         --prune-empty-dirs : remove any empty directories from the copy
@@ -568,6 +569,9 @@ After transcriptome assembly and annotation, differential gene expression (DGE) 
 ### General setup
 
 ```{r}
+#| eval: true
+#| warning: false
+#| message: false
 # Load necessary libraries 
 library("tidyverse")
 library("tximport")
@@ -577,13 +581,16 @@ library("DESeq2")
 ### Read in salmon data
 
 ```{r}
+#| eval: true
+#| warning: false
+#| message: false
 # Locate the directory containing the salmon files
 dir <- "results/trinity/salmon_abund"
 folders <- list.dirs(dir, full.names = FALSE, recursive = FALSE)
 folders 
 
 # Using the folder names:
-# generate a data frame that contains the new sample names, i.e. treatment_rep1,
+# Generate a data frame that contains the new sample names, i.e. treatment_rep1,
 # and the treatment (treated versus untreated)
 condition <- ifelse(grepl("^treated", folders), "treated", "untreated")
 
@@ -614,7 +621,10 @@ txi <- tximport(files, type = "salmon", tx2gene = as.data.frame(tx2gene))
 ### Read in and summarize annotations
 
 ```{r}
-# Read in data
+#| eval: true
+#| warning: false
+#| message: false
+# Read in the annotation data
 annotations_df <- read_tsv("results/annotations/sequence_results_best_hit_desc.txt")
 
 # Since several genes can consist of more than one transcript, we will now condense the data by gene (by choosing the top hit)
@@ -632,14 +642,17 @@ annotations_gene_level <- annotations_df |>
 ### Generate a DESEQDataSet object
 
 ```{r}
+#| eval: true
+#| warning: false
+#| message: false
 # Generate a DESEQDataSet object
 dds = DESeqDataSetFromTximport(txi, colData = samples, design = ~condition)
 
-# Remove uninformative columns
-# requires genes to have Y or more samples with counts of X or more (keep <- rowSums( counts(dds) >= X ) >= Y)
+# Remove uninformative columns (optional)
+# This step only keeps genes that have Y or more samples with counts of X or more (keep <- rowSums( counts(dds) >= X ) >= Y)
 # Choose: Y = 3 because thats the nr of replicates, and 10 a commonly used cutoff
-#keep <- rowSums( counts(dds) >= 10 ) >= 3
-#dds <- dds[keep, ]
+keep <- rowSums( counts(dds) >= 5 ) >= 3
+dds <- dds[keep, ]
 
 # Ensure that untreated samples are seen as the reference level
 dds$condition <- relevel(dds$condition, ref = "untreated")
@@ -648,6 +661,9 @@ dds$condition <- relevel(dds$condition, ref = "untreated")
 ### Perform quality assessment
 
 ```{r}
+#| eval: true
+#| warning: false
+#| message: false
 # Perform rlog transformation for explorative data visualization 
 rld_blindTRUE <- rlog(dds, blind=TRUE)
 
@@ -669,6 +685,9 @@ PCA_plot
 ### Identify DEGs
 
 ```{r}
+#| eval: true
+#| warning: false
+#| message: false
 # Run DESEQ
 dds <- DESeq(dds)
 

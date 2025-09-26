@@ -3151,9 +3151,9 @@ vertical-align: -.125em;
 
 <section id="todays-aims" class="level2">
 <h2 class="anchored" data-anchor-id="todays-aims">Today’s aims</h2>
-<p>In the first part of this tutorial you familiarized yourself with the data, performed quality filtering and started a <em>de novo</em> assembly with Trinity. Today, we will:</p>
+<p>In the first part of this tutorial you familiarized yourself with the data, performed quality filtering and started a <em>de novo</em> assembly with Trinity. Today, you will:</p>
 <ul>
-<li>Assess the quality of your assembly</li>
+<li>Assess the quality of the assembly</li>
 <li>Perform gene prediction and annotation</li>
 <li>Identify differentially expressed genes</li>
 </ul>
@@ -3248,10 +3248,10 @@ Question
 <div class="callout-body-container callout-body">
 <p>After BUSCO completes, answer the following:</p>
 <ol type="1">
-<li>Is the assembly complete?
+<li>How complete is the assembly?
 <ul>
 <li>Look up how BUSCO defines completeness.</li>
-<li>Are there limitations to using BUSCO for transcriptome assemblies?</li>
+<li>Are there limitations to using BUSCO to assess the completeness of transcriptome assemblies?</li>
 </ul></li>
 <li>How many duplicates are there?
 <ul>
@@ -3265,88 +3265,89 @@ Question
 </section>
 <section id="annotation" class="level2">
 <h2 class="anchored" data-anchor-id="annotation">Annotation</h2>
-<p>After assembly and quality control, we can translate the transcript sequences into predicted coding sequences (CDS), identify proteins and then annotate their biological function. In the next section you will do the following:</p>
+<p>After assembly and quality control, we will translate the transcript sequences into coding sequences (CDS), identify proteins and then annotate their biological function. In the next section you will do the following:</p>
 <ul>
-<li>Gene calling using TransDecoder</li>
-<li>Functional annotation using HMMER with the KEGG database</li>
+<li>Perform gene calling using TransDecoder</li>
+<li>Do a functional annotation using HMMER with the KEGG database</li>
 </ul>
 <section id="gene-calling" class="level3">
 <h3 class="anchored" data-anchor-id="gene-calling">Gene calling</h3>
 <p>We will use <a href="https://github.com/TransDecoder/TransDecoder/wiki" target="_blank" rel="noopener noreferrer">TransDecoder</a> to identify likely coding regions (open reading frames, ORFs) and predict proteins from our transcriptome assembly <span class="citation" data-cites="haas2025">(<a href="#ref-haas2025" role="doc-biblioref">Haas 2025</a>)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a output folder</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare an output folder</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run transdecoder </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run TransDecoder </span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:  - Transdecoder can be accessed via the `transcriptomics_bbda` environment</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Transdecoder consists of two steps </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Transdecoder consists of two steps that are run separately </span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#               1. `TransDecoder.LongOrfs` to find long open reading frames </span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#               2. `TransDecoder.Predict` to predict cds and proteins</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ensure that you account for stand information </span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         - make use of the gene to transcript map in step 1</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ensure that in step 2 you only produce a single output cds sequence/transcript to simplify our analysis</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         - use srun with 1 CPU and 20G of memory</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Ensure that you account for stand information </span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Make use of the gene to transcript map in step 1</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Ensure that in step 2 you only produce a single output cds sequence/transcript to simplify our analysis</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Use srun with 1 CPU and 20G of memory</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Use cut to simplify the header of the protein sequences and to </span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># remove everything after the space</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># remove everything after the space.</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># That is a useful habit in order to keep protein (and names in general) short and simple</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="functional-annotation" class="level3">
 <h3 class="anchored" data-anchor-id="functional-annotation">Functional annotation</h3>
-<p>Next, we will functionally annotate the predicted proteins by comparing them to the <a href="https://www.genome.jp/kegg/pathway.html" target="_blank" rel="noopener noreferrer">KEGG Orthology (KO) database</a> using HMMER’s <a href="http://eddylab.org/software/hmmer/Userguide.pdf" target="_blank" rel="noopener noreferrer">hmmsearch</a><span class="citation" data-cites="Finn2015">Kanehisa (<a href="#ref-Kanehisa2000" role="doc-biblioref">2000</a>)</span>. This will allow us to link each transcript to a potential function.</p>
-<p>Note, this will run for 1-2 hours. So once the job started successfully, you can proceed with the following steps. You only will need the results of this analysis once you finished the DEG analysis.</p>
+<p>Next, we will functionally annotate the predicted proteins by comparing them to the <a href="https://www.genome.jp/kegg/pathway.html" target="_blank" rel="noopener noreferrer">KEGG Orthology (KO) database</a> using HMMER’s <a href="http://eddylab.org/software/hmmer/Userguide.pdf" target="_blank" rel="noopener noreferrer">hmmsearch algorithm</a><span class="citation" data-cites="Finn2015 Kanehisa2000">(<a href="#ref-Finn2015" role="doc-biblioref">Finn et al. 2015</a>; <a href="#ref-Kanehisa2000" role="doc-biblioref">Kanehisa 2000</a>)</span>. This will allow us to link each transcript to a potential function.</p>
+<p>Note that this will run for 1-2 hours. So once the job started successfully, you can proceed with the following steps. You only will need the results of this analysis once you finished the DEG analysis.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a sbatch script to run a hmmsearch to compare your proteins against KEGG profiles</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:  </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#         - The KEGG database can be found at </span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#           `/zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/KO_db.hmm`</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Generate a table of per-sequence hits</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         - Use a setting to generate a table of per-sequence hits</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         - add this setting: --notextw </span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         - use at max 10 CPUs, 20G of memory and 4 hours of run time</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> annotations/KEGG/</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the HMMER results to keep only the best hit per transcript</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Convert consecutive spaces to tabs </span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Remove header lines (those starting with &quot;#&quot;)</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Extract columns of interest: transcript ID, target name, bitscore, and e-value</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Keep only hits with e-value &lt;= 1E-3</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 5: Sort first by transcript ID, then by highest bitscore and lowest e-value</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 6: From the sorted list, keep only the top hit per transcript</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/ \+ /\t/g&#39;</span> annotations/KEGG/sequence_results.txt <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sed</span> <span class="st">&#39;/^#/d&#39;</span><span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/ /\t/g&#39;</span><span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;{print $1, $3, $6, $5}&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;($4 + 0) &lt;= 1E-3&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-k3,3gr</span> <span class="at">-k4,4g</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">--stable</span> <span class="at">-u</span> <span class="at">-k1,1</span> <span class="dt">\</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span>  annotations/KEGG/sequence_results_best_hit.txt</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the filtered HMMER results with the KEGG Orthology (KO) mapping file</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Inside `&lt;()` sort both files to prepare them for &#39;join&#39;</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#         - sequence_results_best_hit.txt is sorted by column 2 (KO ID)</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ko_list is sorted by column 1 (KO ID)</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;join&#39; to combine the two files on these columns</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -1 2 : match column 2 of the first file</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -2 1 : match column 1 of the second file</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -a1 : keep all rows from the first file, even if no match is found</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -e &#39;-&#39; : fill in missing values with &#39;-&#39;</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -t $&#39;\t&#39; : use tab as the delimiter</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -o ... : specify output order </span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">#                    (from file 1: cols 1,2,4,3; from file 2: cols 2 and 12)</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Sort the merged output and save as &#39;temp&#39;</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">join</span> <span class="at">-a1</span> <span class="at">-1</span> 2 <span class="at">-2</span> 1 <span class="at">-e</span><span class="st">&#39;-&#39;</span> <span class="at">-t</span> <span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-o1.1,1.2,1.4,1.3,2.2,2.12</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k2</span> annotations/KEGG/sequence_results_best_hit.txt<span class="op">)</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k1</span>  /zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/ko_list<span class="op">)</span> <span class="kw">|</span> <span class="va">LC_ALL</span><span class="op">=</span>C  <span class="fu">sort</span> <span class="op">&gt;</span>  temp</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a header line to the final output file</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Use &#39;echo&#39; to print the header with column names</span></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;cat - temp&#39; to concatenate the header (-) with the contents of &#39;temp&#39;</span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="co">#         - here, &#39;-&#39; tells &#39;cat&#39; to read from standard input (the echoed header)</span></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="co">#         - &#39;temp&#39; is the file with our merged results</span></span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Save everything into the final output file &#39;annotations/KEGG/annotations.txt&#39;</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">&quot;accession\tKO_hmm\tKO_e_value\tKO_bit_score\tKO_bit_score_cutoff\tKO_Definition&quot;</span> <span class="kw">|</span> <span class="fu">cat</span> <span class="at">-</span> temp <span class="op">&gt;</span> annotations/KEGG/sequence_results_best_hit_desc.txt</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup intermediate files</span></span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> temp </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The code below does the following:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Convert consecutive spaces to tabs </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Remove lines starting with &quot;#&quot;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Extract columns of interest: transcript ID, target name, bitscore, and e-value</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Keep only hits with e-value &lt;= 1E-3</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 5: Sort first by transcript ID, then by highest bitscore and lowest e-value</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 6: From the sorted list, keep only the top hit per transcript</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/ \+ /\t/g&#39;</span> annotations/KEGG/sequence_results.txt <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sed</span> <span class="st">&#39;/^#/d&#39;</span><span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/ /\t/g&#39;</span><span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;{print $1, $3, $6, $5}&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;\t&#39;</span> <span class="at">-v</span> OFS=<span class="st">&#39;\t&#39;</span> <span class="st">&#39;($4 + 0) &lt;= 1E-3&#39;</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-k3,3gr</span> <span class="at">-k4,4g</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t</span><span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">--stable</span> <span class="at">-u</span> <span class="at">-k1,1</span> <span class="dt">\</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">&gt;</span>  annotations/KEGG/sequence_results_best_hit.txt</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the filtered HMMER results with the KEGG Orthology (KO) mapping file</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Inside `&lt;()` sort both files to prepare them for &#39;join&#39;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#         - sequence_results_best_hit.txt is sorted by column 2 (KO ID)</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#         - ko_list is sorted by column 1 (KO ID)</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;join&#39; to combine the two files on the KO ID columns</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -1 2 : match column 2 of the first file</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -2 1 : match column 1 of the second file</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -a1 : keep all rows from the first file, even if no match is found</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -e &#39;-&#39; : fill in missing values with &#39;-&#39;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -t $&#39;\t&#39; : use tab as the delimiter</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">#         - -o ... : specify output order </span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co">#                    (from file 1: cols 1,2,4,3; from file 2: cols 2 and 12)</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Sort the merged output and save as &#39;temp&#39;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">join</span> <span class="at">-a1</span> <span class="at">-1</span> 2 <span class="at">-2</span> 1 <span class="at">-e</span><span class="st">&#39;-&#39;</span> <span class="at">-t</span> <span class="st">$&#39;</span><span class="dt">\t</span><span class="st">&#39;</span> <span class="at">-o1.1,1.2,1.4,1.3,2.2,2.12</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k2</span> annotations/KEGG/sequence_results_best_hit.txt<span class="op">)</span> <span class="op">&lt;(</span><span class="va">LC_ALL</span><span class="op">=</span>C <span class="fu">sort</span> <span class="at">-k1</span>  /zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/ko_list<span class="op">)</span> <span class="kw">|</span> <span class="va">LC_ALL</span><span class="op">=</span>C  <span class="fu">sort</span> <span class="op">&gt;</span>  temp</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a header line to the final output file</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Use &#39;echo&#39; to print the header with column names</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Use &#39;cat - temp&#39; to concatenate the header (-) with the contents of &#39;temp&#39;</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="co">#         - here, &#39;-&#39; tells &#39;cat&#39; to read from standard input (the echoed header)</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="co">#         - &#39;temp&#39; is the file with our merged results</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Save everything into the final output file &#39;annotations/KEGG/annotations.txt&#39;</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">&quot;accession\tKO_hmm\tKO_e_value\tKO_bit_score\tKO_bit_score_cutoff\tKO_Definition&quot;</span> <span class="kw">|</span> <span class="fu">cat</span> <span class="at">-</span> temp <span class="op">&gt;</span> annotations/KEGG/sequence_results_best_hit_desc.txt</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup intermediate files</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> temp </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-simple callout-note callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
@@ -3382,12 +3383,12 @@ Question
 <h3 class="anchored" data-anchor-id="quantification-with-salmon">Quantification with salmon</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write an sbatch script to run salmon for transcript quantification</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:    Check the trinity documentation and find a perl helper script that can be used to quantify with salmon</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#           Submit this via sbatch with 4 CPUs, 20G of memory and a 2h hour run time </span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#           Ensure that you activate the transcriptomics_bbda conda environment</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#           Do not forget about strand orientation </span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#           use `--gene_trans_map  xxx/Trinity.fasta.gene_trans_map` to quantify on transcript as well as gene level</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#           add `--prep_reference` to build a target index</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hints:    - Check the trinity documentation and find a perl helper script that can be used to quantify with salmon</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Submit this via sbatch with 4 CPUs, 20G of memory and a 2h hour run time </span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Ensure that you activate the transcriptomics_bbda conda environment</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Do not forget about strand orientation </span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Use `--gene_trans_map  xxx/Trinity.fasta.gene_trans_map` to quantify on transcript as well as gene level</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#           - Add `--prep_reference` to build a target index</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup:</span></span>
@@ -3410,9 +3411,9 @@ Question
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># for the downstream analyses to your own computer</span></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> ... </span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: use rsync to maintain a folder structure but have fine-grained control over what you want to access </span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Use rsync for efficient transfer with fine-grained control</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         -a : archive mode (preserves permissions, timestamps, symlinks)</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: You can use rsync to download and maintain a folder structure </span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># but have fine-grained control over what you want to access </span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1:  -a : archive mode (preserves permissions, timestamps, symlinks)</span></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">#         -v : verbose (prints progress)</span></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Keep directory structure but only include specific files</span></span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#         --prune-empty-dirs : remove any empty directories from the copy</span></span>
