@@ -161,10 +161,12 @@ Since we do have a lot of things planned for today, only work on this section on
 ...
 
 # Run BUSCO  
+# Estimated run time: ~ 20 min
 # Hints:    - Ensure that you use BUSCO in a mode that is suited for transcriptomes 
 #           - Ensure that it is run in a mode suitable for eukaryotes 
-#             (i.e. by  using eukaryota_odb10)
+#             (i.e. use eukaryota_odb10, a very general eukaryotic marker gene set)
 #           - BUSCO can be accessed with the `transcriptomics_bbda` conda environment
+#           - Use 10 CPUs and 50G of memory
 ...
 ```
 
@@ -178,10 +180,10 @@ mkdir trinity/busco
 # Run BUSCO 
 conda activate /zfs/omics/projects/education/BBDA_transcriptomics/denovo/envs/transcriptomics_bbda 
 
-srun --cpus-per-task 20 --mem=50G busco \
+srun --cpus-per-task 10 --mem=50G busco \
     -i trinity/trinity.Trinity.fasta \
     -m transcriptome -f \
-    -c 20 --out trinity/busco \
+    -c 10 --out trinity/busco \
     -l eukaryota_odb10 
 
 conda deactivate
@@ -237,6 +239,7 @@ We will use [TransDecoder](https://github.com/TransDecoder/TransDecoder/wiki) to
 ...
 
 # Run TransDecoder 
+# Estimated run time: ~ 5 + 15 min
 # Hints:  - Transdecoder can be accessed via the `transcriptomics_bbda` environment
 #         - Transdecoder consists of two steps that are run separately 
 #               1. `TransDecoder.LongOrfs` to find long open reading frames 
@@ -250,6 +253,7 @@ We will use [TransDecoder](https://github.com/TransDecoder/TransDecoder/wiki) to
 # Use cut to simplify the header of the protein sequences and to 
 # remove everything after the space.
 # That is a useful habit in order to keep protein (and names in general) short and simple
+# It is also useful if you want to, for example, parse annotations further down the line
 ...
 ```
 
@@ -287,7 +291,8 @@ Note that this will run for 1-2 hours. So once the job started successfully, you
 
 ```{bash}
 # Write a sbatch script to run a hmmsearch to compare your proteins against KEGG profiles
-# Hints:  
+# Estimated run time: 1-2 hours
+# Hints:  - Use the pep file with the simplified header, otherwise you will run into issues with the following steps!
 #         - The KEGG database can be found at 
 #           `/zfs/omics/projects/education/BBDA_transcriptomics/denovo/databases/KO_db.hmm`
 #         - Use a setting to generate a table of per-sequence hits
@@ -297,7 +302,7 @@ mkdir annotations/KEGG/
 ...
 
 # Filter the HMMER results to keep only the best hit per transcript
-# The code below does the following:
+# The code below does the following (and might take a minute or so to finish):
 # Step 1: Convert consecutive spaces to tabs 
 # Step 2: Remove lines starting with "#"
 # Step 3: Extract columns of interest: transcript ID, target name, bitscore, and e-value
@@ -427,6 +432,7 @@ In this section, we will make use of a Trinity helper script to quantify transcr
 
 ```{bash}
 # Write an sbatch script to run salmon for transcript quantification
+# Estimated run time: ~ 5 min
 # Hints:    - Check the trinity documentation and find a perl helper script that can be used to quantify with salmon
 #           - Submit this via sbatch with 4 CPUs, 20G of memory and a 2h hour run time 
 #           - Ensure that you activate the transcriptomics_bbda conda environment
@@ -650,7 +656,8 @@ dds = DESeqDataSetFromTximport(txi, colData = samples, design = ~condition)
 
 # Remove uninformative columns (optional)
 # This step only keeps genes that have Y or more samples with counts of X or more (keep <- rowSums( counts(dds) >= X ) >= Y)
-# Choose: Y = 3 because thats the nr of replicates, and 10 a commonly used cutoff
+# Choose: Y = 3 because thats the nr of replicates, and 3 a commonly used cutoff
+# I used 5 here, since we work with down-sampled data
 keep <- rowSums( counts(dds) >= 5 ) >= 3
 dds <- dds[keep, ]
 

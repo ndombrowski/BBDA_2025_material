@@ -163,19 +163,22 @@ DATA="/zfs/omics/projects/education/BBDA_transcriptomics/denovo/data"
 # Make a folder to store the fastqc results
 # Hint: Since you will repeat the step after the quality cleaning
 # make a subfolder to store the outputs when analysing the raw data
-...
+mkdir -p quality/raw
 
 # Run FastQC
+# Estimated run time: < 5 min
 # Hints: - Run FastQC on all files at once
 #        - Ensure that the data is generated in the output folder that you have just generated
 #       - Submit this on the compute node with srun with these settings:
-#         `--cpus-per-task 5` and `--mem=20G`
+#         `--cpus-per-task 4` and `--mem=20G`
 #       - Make use of the DATA variable to access the raw fastq.gz files
-srun --cpus-per-task 5 --mem=20G ...
+#       - Make sure that the threads fastqc uses are the sames as the ones requested with --cpus-per-task 4
+srun --cpus-per-task 4 --mem=20G ...
 
 # Run seqkit
+# Estimated run time: < 5 min
 # `seqkit stats` can be used to generate summary stats for multiple fastq files in a single text file
-# Hints:   - Use srun with 5 CPUs and 20G of memory, 
+# Hints:   - Use srun with 4 CPUs and 20G of memory, 
 #          - Generate a single output file that contains all stats 
 #            for all 12 fastq files in tabular format
 #          - Store the output file in the quality/raw folder
@@ -192,9 +195,11 @@ srun ...
 # Hint: replace 'quality/raw/seqkit.tsv' with the path to your own stats file
 awk 'NR>1 {sum+=$4} END {print sum}' quality/raw/seqkit.tsv
 
-# Download the FastQC HTML files to your personal computer
-# Hint: When using scp run the scp command from your local computer not the HPC
-#       by using the following format `scp file destination`
+# View the FastQC HTML files
+# Hints:    -  You can open HTML files on the server via R-studio file interface 
+#              or download the files to your computer with scp
+#           - When using scp run the scp command from your local computer not the HPC
+#             by using the following format `scp file destination`
 ...
 ```
 
@@ -210,10 +215,10 @@ DATA="/zfs/omics/projects/education/BBDA_transcriptomics/denovo/data"
 mkdir -p quality/raw
 
 # Run FastQC
-srun --cpus-per-task 5 --mem=20G fastqc ${DATA}/*fastq.gz -o quality/raw --threads 10
+srun --cpus-per-task 4 --mem=20G fastqc ${DATA}/*fastq.gz -o quality/raw --threads 4
 
 # Run seqkit
-srun --cpus-per-task 5 --mem=20G seqkit stats ${DATA}/*fastq.gz -aTo quality/raw/seqkit.tsv --threads 5
+srun --cpus-per-task 4 --mem=20G seqkit stats ${DATA}/*fastq.gz -aTo quality/raw/seqkit.tsv --threads 4
 
 # Answer: We work with 60,000,000 reads
 awk 'NR>1 {sum+=$4} END {print sum}' quality/raw/seqkit.tsv
@@ -274,10 +279,12 @@ DATA="/zfs/omics/projects/education/BBDA_transcriptomics/denovo/data/"
 SAMPLE=$(cut -f1 metadata.txt | sed "1d" | sed -n "${SLURM_ARRAY_TASK_ID}p")
 
 # Run fastp
+# Estimated run time: < 5 min
 # Hints:    - Use the DATA and SAMPLE variables to build file names
 #           - Trim reads where quality drops below 25 in a 3 bp window
 #           - Discard reads shorter than 50 bp
 #           - Save paired outputs in two separate files
+#           - Set the threads in accordance with the SLURM allocations
 fastp ...
 '''
 
@@ -291,7 +298,7 @@ srun ...
 srun ...
 
 # Check total number of reads remaining after the quality cleaning
-awk 'NR>1 {sum+=$4} END {print sum}' quality/cleaned/seqkit.tsv
+...
 ```
 
 ::: {.callout-caution title="Code example" collapse="true" appearance="simple"}
@@ -320,21 +327,22 @@ DATA="/zfs/omics/projects/education/BBDA_transcriptomics/denovo/data/"
 SAMPLE=$(cut -f1 metadata.txt | sed "1d" | sed -n "${SLURM_ARRAY_TASK_ID}p")
 
 # Run fastp in an array
-fastp -i ${DATA}/${SAMPLE}_1.fastq.gz -I ${DATA}/${SAMPLE}_2.fastq.gz \
-    -o fastp/${SAMPLE}_1_paired.fastq.gz -O fastp/${SAMPLE}_2_paired.fastq.gz \
-    --unpaired1 fastp/${SAMPLE}_1_unpaired.fastq.gz --unpaired2 fastp/${SAMPLE}_2_unpaired.fastq.gz \
-    --cut_window_size 3 --cut_mean_quality 25 --length_required 50 --thread 4 \
-    --html fastp/${SAMPLE}.html
+fastp -i ${DATA}/${SAMPLE}_1.fastq.gz \
+    -I ${DATA}/${SAMPLE}_2.fastq.gz \
+    -o fastp/${SAMPLE}_1_paired.fastq.gz \
+    -O fastp/${SAMPLE}_2_paired.fastq.gz \
+    --cut_window_size 3 --cut_mean_quality 25 --length_required 50 \
+    --thread 4 
 '''
 
 # Submit the job 
 sbatch scripts/fastp.sh
 
 # Run FastQC
-srun --cpus-per-task=5 --mem=20G fastqc fastp/*_paired.fastq.gz -o quality/cleaned --threads 5
+srun --cpus-per-task=4 --mem=20G fastqc fastp/*_paired.fastq.gz -o quality/cleaned --threads 4
 
 # Run SeqKit
-srun --cpus-per-task=5 --mem=20G seqkit stats fastp/*_paired.fastq.gz -aTo quality/cleaned/seqkit.tsv --threads 5
+srun --cpus-per-task=4 --mem=20G seqkit stats fastp/*_paired.fastq.gz -aTo quality/cleaned/seqkit.tsv --threads 4
 
 # Check total number of reads remaining
 # We now work with 58,411,986 reads
@@ -418,7 +426,7 @@ awk 'BEGIN{OFS="\t"}
 #SBATCH --job-name=trinity
 #SBATCH --output=logs/trinity_%j.out
 #SBATCH --error=logs/trinity_%j.err
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=10
 #SBATCH --mem=50G
 #SBATCH --time=24:00:00
 
@@ -428,7 +436,7 @@ conda activate /zfs/omics/projects/education/BBDA_transcriptomics/denovo/envs/tr
 
 # Run trinity
 Trinity --seqType fq --max_memory 50G --samples_file trinity/trinity_mapping.txt \
-    --SS_lib_type RF  --inchworm_cpu 20 --CPU 20 \
+    --SS_lib_type RF  --inchworm_cpu 10 --CPU 10 \
     --min_kmer_cov 2 --full_cleanup \
     --output trinity/trinity
 '''
