@@ -744,18 +744,20 @@ write.csv(res_table_sig, "results/trinity/degs.csv", row.names = FALSE, quote = 
 
 **Versions matter**: When running this tutorial I noticed that knowing the version of your software is crucial if you want to repeat the code as this can impact your results. This is what happened to me, when running the code in two different R environments:
 
-| Metric              | R 4.2.2 + DESeq2 1.38.3 | R 4.4.2 + DESeq2 1.46.0 |
+| Metric              | R 4.2.2 + DESeq2 1.38.0 |  R 4.4.2 + DESeq2 1.46.0|
 |---------------------|-------------------------|-------------------------|
-| Significant DEGs    | 73 genes                | 157 genes               |
-| Low-count filtering | 2161 genes filtered     | 926 genes filtered      |
-| Filter threshold    | mean count \< 16        | mean count \< 11        |
+| Significant DEGs    | 33 genes                | 58 genes                |
+| Low-count filtering | 3782 genes filtered     | 2219 genes filtered     |
+| Filter threshold    | mean count \< 11        | mean count \< 7         |
+
+
 
 The `filterThreshold` is an automatically calculated cutoff used in DESeq2's independent filtering. It represents the minimum mean normalized count that a gene should have to be included in multiple testing correction. You can check the used threshold with `metadata(res)$filterThreshold`.
 
 So when writing code:
 
 -   always record the package versions in your method section
--   use `sessionInfo()` in your R scripts
+-   use `sessionInfo()` in your R scripts to automatically print all attached packages and package version
 
 
 ## References

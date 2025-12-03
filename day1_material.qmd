@@ -123,8 +123,8 @@ Before you start working with this data, investigate where the authors made the 
 4.  Based on the [sample information on ENA](https://www.ebi.ac.uk/ena/browser/view/PRJEB12372) generate a mapping file, i.e. a file that links the sample IDs with more descriptive information:
     -   Use the Run Accessions from `/zfs/omics/projects/education/BBDA_transcriptomics/denovo/data` (e.g., ERR1211089) and find the corresponding treatment by exploring the information on ENA that is stored under the Sample Accession. 
     -   Generate a metadata file called `metadata.txt` in your project directory. Add two tab-separated headers: runID and treatment. Then add 6 rows with the sample information (3 samples from treated and 3 samples from untreated conditions). 
-    - Hint: To have a consistent metadata table, use the term "treated" samples from 400 ppm and "untreated", for samples grown under 1200 ppm.
-    - Hint: If you completely get stuck you can also use the file available in ``/zfs/omics/projects/education/BBDA_transcriptomics/denovo/`.
+    - Hint: To have a consistent metadata table, use the term "untreated" samples from 400 ppm and "treated", for samples grown under 1200 ppm.
+    - Hint: If you completely get stuck you can also use the file available in `/zfs/omics/projects/education/BBDA_transcriptomics/denovo/`.
 
 ::: {.callout-tip title="Answer" collapse="true" appearance="simple"}
 1.  The data was deposited in the [European Nucleotide Archive (ENA)](http://www.ebi.ac.uk/ena) under the accessions HADH01000001-HADH01059478.
@@ -247,6 +247,7 @@ The reason why we will use fastp instead of Trimmomatic is because it runs faste
 -   `--cut_window_size 3`
 -   `--cut_mean_quality 25`
 -   `--length_required 50`
+-   `--cut_right`
 
 Since fastP will run for a bit longer and we want to run it on multiple samples, we will now write our first SLURM job script. For this, we could use a [for-loop](https://scienceparkstudygroup.github.io/ibed-bioinformatics-page/source/core_tools/bash-for-loops.html), which would run all 6 fastP steps one after the other. You can also use [SLURM arrays](https://blog.ronin.cloud/slurm-job-arrays/) to parallelize these steps and for example, run 2 fastp steps at the same time. Because you’ve likely already worked with for-loops, we’ll show you an example of using a SLURM array instead.
 
@@ -331,7 +332,7 @@ fastp -i ${DATA}/${SAMPLE}_1.fastq.gz \
     -I ${DATA}/${SAMPLE}_2.fastq.gz \
     -o fastp/${SAMPLE}_1_paired.fastq.gz \
     -O fastp/${SAMPLE}_2_paired.fastq.gz \
-    --cut_window_size 3 --cut_mean_quality 25 --length_required 50 \
+    --cut_window_size 3 --cut_mean_quality 25 --length_required 50 --cut_right \
     --thread 4 
 '''
 
@@ -360,7 +361,7 @@ The cleaning worked, the quality is slightly better and the adapters sequences a
 
 ## Assembly
 
-There are a range of different tools for de novo assembly. In this tutorial, we will use Trinity [@Grabherr2011], an open source tool that comes with a long list of associated tools for downstream-analyses.
+There are a range of different tools for de novo assembly. In this tutorial, we will use Trinity [@Grabherr2011], an open source tool that comes with a long list of associated tools for downstream-analyses. For detailed usage information, you can visit [the tools wiki](https://github.com/trinityrnaseq/trinityrnaseq/wiki).
 
 ```{bash}
 # Create a samples mapping file suited Trinity

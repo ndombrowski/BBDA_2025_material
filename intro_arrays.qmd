@@ -107,7 +107,7 @@ Advantages:
 :::
 
 
-## Breaking commands down
+## Breaking commands down {.smaller}
 
 ```{bash}
 #| eval: true 
